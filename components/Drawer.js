@@ -3,11 +3,10 @@ import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 
 import {Navigation} from 'react-native-navigation';
 
-class App extends Component {
+class Drawer extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Main Screen</Text>
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={() => this.navigateToScreen('TestScreen')}>
@@ -36,6 +35,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'white',
   },
   buttonText: {
     fontSize: 32,
@@ -49,4 +49,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default Drawer;
