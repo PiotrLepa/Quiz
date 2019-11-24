@@ -55,12 +55,8 @@ Navigation.events().registerAppLaunchedListener(() => {
             children: [
               {
                 component: {
+                  id: 'HomeScreenId',
                   name: 'HomeScreen',
-                }
-              },
-              {
-                component: {
-                  name: 'QuizScreen',
                 }
               },
             ],
