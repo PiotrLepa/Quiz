@@ -26,6 +26,31 @@ class Drawer extends React.Component {
 
   navigateToScreen(componentName) {
     this.hideDrawer();
+    // Navigation.setRoot({
+    //   root: {
+    //     sideMenu: {
+    //       left: {
+    //         component: {
+    //           id: 'drawerId',
+    //           name: 'Drawer',
+    //         }
+    //       },
+    //       center: {
+    //         stack: {
+    //           id: 'MainStack',
+    //           children: [
+    //             {
+    //               component: {
+    //                 id: 'HomeScreenId',
+    //                 name: 'HomeScreen',
+    //               }
+    //             },
+    //           ],
+    //         }
+    //       }
+    //     }
+    //   }
+    // });
     // Navigation.push(this.props.componentId, {
     //   component: {
     //     name: componentName,
@@ -37,7 +62,7 @@ class Drawer extends React.Component {
     Navigation.mergeOptions(this.props.componentId, {
       sideMenu: {
         left: {
-          visible: true,
+          visible: false,
         },
       },
     });
