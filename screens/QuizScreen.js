@@ -5,13 +5,13 @@ import {
   Text,
 } from 'react-native';
 
-class App extends React.Component {
+class QuizScreen extends React.Component {
 
   render() {
     return (
       <>
         <View>
-          <Text>App</Text>
+          <Text>Quiz</Text>
         </View>
       </>
     );
@@ -22,4 +22,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default App;
+export default QuizScreen;

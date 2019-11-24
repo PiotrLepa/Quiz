@@ -5,13 +5,13 @@ import {
   Text,
 } from 'react-native';
 
-class App extends React.Component {
+class HomeScreen extends React.Component {
 
   render() {
     return (
       <>
         <View>
-          <Text>App</Text>
+          <Text>Home</Text>
         </View>
       </>
     );
@@ -22,4 +22,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default App;
+export default HomeScreen;
