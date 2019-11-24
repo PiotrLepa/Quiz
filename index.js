@@ -2,12 +2,16 @@
  * @format
  */
 
-import {Navigation} from 'react-native-navigation';
+import { Navigation } from 'react-native-navigation';
 import App from './App';
-import Splash from './screens/HomeScreen';
+import HomeScreen from './screens/HomeScreen';
 import QuizScreen from './screens/QuizScreen';
+import Drawer from './navigation/Drawer';
+Navigation.registerComponent('HomeScreen', () => HomeScreen);
+Navigation.registerComponent('QuizScreen', () => QuizScreen);
+Navigation.registerComponent('Drawer', () => Drawer);
 
-Navigation.registerComponent('navigation.playground.WelcomeScreen', () => App);
+// Navigation.registerComponent('navigation.playground.WelcomeScreen', () => App);
 
 // Navigation.events().registerAppLaunchedListener(() => {
 //   Navigation.setRoot({
@@ -42,7 +46,7 @@ Navigation.events().registerAppLaunchedListener(() => {
         left: {
           component: {
             id: 'drawerId',
-            name: 'QuizScreen',
+            name: 'Drawer',
           }
         },
         center: {
@@ -51,7 +55,12 @@ Navigation.events().registerAppLaunchedListener(() => {
             children: [
               {
                 component: {
-                  name: 'Splash',
+                  name: 'HomeScreen',
+                }
+              },
+              {
+                component: {
+                  name: 'QuizScreen',
                 }
               },
             ],
