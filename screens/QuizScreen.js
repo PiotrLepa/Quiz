@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 
-import {Navigation} from 'react-native-navigation';
+import {navigate} from '../navigation/NavigationUtils';
 
 class QuizScreen extends React.Component {
   render() {
@@ -11,20 +11,12 @@ class QuizScreen extends React.Component {
           <Text>QuizScreen</Text>
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => this.navigateToScreen('HomeScreen')}>
+            onPress={() => navigate('HomeScreen')}>
             <Text style={styles.buttonText}>HomeScreen</Text>
           </TouchableOpacity>
         </View>
       </>
     );
-  }
-
-  navigateToScreen(componentName) {
-    Navigation.push(this.props.componentId, {
-      component: {
-        name: componentName,
-      },
-    });
   }
 }
 

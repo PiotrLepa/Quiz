@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 
-import {Navigation} from 'react-native-navigation';
+import {hideDrawer, navigate} from './NavigationUtils';
 
 class Drawer extends React.Component {
   render() {
@@ -11,61 +11,17 @@ class Drawer extends React.Component {
           <Text>Drawer</Text>
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => this.navigateToScreen('QuizScreen')}>
+            onPress={() => navigate('QuizScreen')}>
             <Text style={styles.buttonText}>QuizScreen</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => this.navigateToScreen('HomeScreen')}>
+            onPress={() => navigate('HomeScreen')}>
             <Text style={styles.buttonText}>HomeScreen</Text>
           </TouchableOpacity>
         </View>
       </>
     );
-  }
-
-  navigateToScreen(componentName) {
-    this.hideDrawer();
-    // Navigation.setRoot({
-    //   root: {
-    //     sideMenu: {
-    //       left: {
-    //         component: {
-    //           id: 'drawerId',
-    //           name: 'Drawer',
-    //         }
-    //       },
-    //       center: {
-    //         stack: {
-    //           id: 'MainStack',
-    //           children: [
-    //             {
-    //               component: {
-    //                 id: 'HomeScreenId',
-    //                 name: 'HomeScreen',
-    //               }
-    //             },
-    //           ],
-    //         }
-    //       }
-    //     }
-    //   }
-    // });
-    // Navigation.push(this.props.componentId, {
-    //   component: {
-    //     name: componentName,
-    //   },
-    // });
-  }
-
-  hideDrawer() {
-    Navigation.mergeOptions(this.props.componentId, {
-      sideMenu: {
-        left: {
-          visible: false,
-        },
-      },
-    });
   }
 }
 
