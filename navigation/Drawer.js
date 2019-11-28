@@ -1,7 +1,8 @@
 import React from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 
-import {hideDrawer, navigate} from './NavigationUtils';
+import {navigate} from './NavigationUtils';
+import {HOME_SCREEN, QUIZ_SCREEN} from '../Constants';
 
 class Drawer extends React.Component {
   render() {
@@ -11,12 +12,12 @@ class Drawer extends React.Component {
           <Text>Drawer</Text>
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => navigate('QuizScreen')}>
+            onPress={() => navigate(HOME_SCREEN)}>
             <Text style={styles.buttonText}>QuizScreen</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => navigate('HomeScreen')}>
+            onPress={() => navigate(QUIZ_SCREEN)}>
             <Text style={styles.buttonText}>HomeScreen</Text>
           </TouchableOpacity>
         </View>

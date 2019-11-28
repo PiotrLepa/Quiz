@@ -1,12 +1,7 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 
 class App extends React.Component {
-
   render() {
     return (
       <>
@@ -15,11 +10,9 @@ class App extends React.Component {
         </View>
       </>
     );
-  };
-};
+  }
+}
 
-const styles = StyleSheet.create({
-
-});
+const styles = StyleSheet.create({});
 
 export default App;

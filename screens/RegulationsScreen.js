@@ -1,20 +1,37 @@
 import React from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import {navigate} from '../navigation/NavigationUtils';
+import {HOME_SCREEN, SHOW_REGULATIONS_SCREEN_STORAGE} from '../Constants';
 
-import {HOME_SCREEN} from '../Constants';
+class RegulationsScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.saveToStorage();
+  }
 
-class QuizScreen extends React.Component {
+  saveToStorage = async () => {
+    try {
+      await AsyncStorage.setItem(
+        SHOW_REGULATIONS_SCREEN_STORAGE,
+        SHOW_REGULATIONS_SCREEN_STORAGE,
+      );
+    } catch (e) {
+      return false;
+    }
+  };
+
   render() {
     return (
       <>
         <View style={styles.container}>
-          <Text>QuizScreen</Text>
+          <Text>Regulamin</Text>
+          <Text>Przechodząc dalej akceptujesz regulamin</Text>
           <TouchableOpacity
             style={styles.buttonContainer}
             onPress={() => navigate(HOME_SCREEN)}>
-            <Text style={styles.buttonText}>HomeScreen</Text>
+            <Text style={styles.buttonText}>HOME SCREEN</Text>
           </TouchableOpacity>
         </View>
       </>
@@ -40,4 +57,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default QuizScreen;
+export default RegulationsScreen;

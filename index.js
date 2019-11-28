@@ -1,27 +1,14 @@
-/**
- * @format
- */
-
 import {Navigation} from 'react-native-navigation';
-import App from './App';
 import HomeScreen from './screens/HomeScreen';
 import QuizScreen from './screens/QuizScreen';
+import RegulationsScreen from './screens/RegulationsScreen';
+
 import {setNavigationRoot} from './navigation/NavigationUtils';
+import {HOME_SCREEN, QUIZ_SCREEN, REGULATIONS_SCREEN} from './Constants';
 
-Navigation.registerComponent('HomeScreen', () => HomeScreen);
-Navigation.registerComponent('QuizScreen', () => QuizScreen);
-
-// Navigation.registerComponent('navigation.playground.WelcomeScreen', () => App);
-
-// Navigation.events().registerAppLaunchedListener(() => {
-//   Navigation.setRoot({
-//     root: {
-//       component: {
-//         name: 'navigation.playground.WelcomeScreen',
-//       },
-//     },
-//   });
-// });
+Navigation.registerComponent(HOME_SCREEN, () => HomeScreen);
+Navigation.registerComponent(QUIZ_SCREEN, () => QuizScreen);
+Navigation.registerComponent(REGULATIONS_SCREEN, () => RegulationsScreen);
 
 Navigation.events().registerAppLaunchedListener(() => {
   Navigation.setDefaultOptions({

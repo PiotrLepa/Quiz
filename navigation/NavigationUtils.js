@@ -1,18 +1,20 @@
 import Drawer from './Drawer';
 import {Navigation} from 'react-native-navigation';
 
-Navigation.registerComponent('Drawer', () => Drawer);
+import {DRAWER} from '../Constants';
+
+Navigation.registerComponent(DRAWER, () => Drawer);
 
 export const hideDrawer = componentId =>
   setDrawerVisibility(componentId, false);
 
 export const showDrawer = componentId => setDrawerVisibility(componentId, true);
 
-export const navigate = (targetComponentName) => {
-    setNavigationRoot({
-      name: targetComponentName,
-    });
-  };
+export const navigate = targetComponentName => {
+  setNavigationRoot({
+    name: targetComponentName,
+  });
+};
 
 export const setNavigationRoot = component =>
   Navigation.setRoot({
@@ -21,7 +23,7 @@ export const setNavigationRoot = component =>
         left: {
           component: {
             id: 'drawerId',
-            name: 'Drawer',
+            name: DRAWER,
           },
         },
         center: {

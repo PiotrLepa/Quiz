@@ -1,9 +1,34 @@
 import React from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
-
+import AsyncStorage from '@react-native-community/async-storage';
 import {navigate} from '../navigation/NavigationUtils';
+import {
+  REGULATIONS_SCREEN,
+  QUIZ_SCREEN,
+  SHOW_REGULATIONS_SCREEN_STORAGE,
+} from '../Constants';
 
 class HomeScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.shouldShowRegulationsScreen().then(shouldShow => {
+      if (shouldShow) {
+        navigate(REGULATIONS_SCREEN);
+      }
+    });
+  }
+
+  shouldShowRegulationsScreen = async () => {
+    try {
+      const showRegulationsScreen = await AsyncStorage.getItem(
+        SHOW_REGULATIONS_SCREEN_STORAGE,
+      );
+      return showRegulationsScreen === null;
+    } catch (e) {
+      return true;
+    }
+  };
+
   render() {
     return (
       <>
@@ -11,7 +36,7 @@ class HomeScreen extends React.Component {
           <Text>HomeScreen</Text>
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => navigate('QuizScreen')}>
+            onPress={() => navigate(QUIZ_SCREEN)}>
             <Text style={styles.buttonText}>QuizScreen</Text>
           </TouchableOpacity>
         </View>
