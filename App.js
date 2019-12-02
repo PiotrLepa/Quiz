@@ -1,16 +1,14 @@
 import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
+const App  = () => {
 
-class App extends React.Component {
-  render() {
-    return (
-      <>
-        <View>
-          <Text>App</Text>
-        </View>
-      </>
-    );
-  }
+  return (
+    <>
+      <View>
+        <Text>App</Text>
+      </View>
+    </>
+  );
 }
 
 const styles = StyleSheet.create({});

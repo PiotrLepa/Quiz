@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import SplashScreen from 'react-native-splash-screen';
 import {navigate} from '../navigation/NavigationUtils';
 import {
   REGULATIONS_SCREEN,
@@ -16,6 +17,10 @@ class HomeScreen extends React.Component {
         navigate(REGULATIONS_SCREEN);
       }
     });
+  }
+
+  componentDidMount() {
+    SplashScreen.hide();
   }
 
   shouldShowRegulationsScreen = async () => {
