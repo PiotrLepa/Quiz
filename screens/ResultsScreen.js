@@ -1,17 +1,78 @@
-import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, View, Text, FlatList} from 'react-native';
 
-class QuizScreen extends React.Component {
-  render() {
-    return (
-      <>
-        <View style={styles.container}>
-          <Text>ResultsScreen</Text>
-        </View>
-      </>
-    );
-  }
-}
+const getResults = () => {
+  return [
+    {
+      nick: 'Tomek',
+      score: 5,
+      total: 7,
+      type: 'matematyka',
+      date: '2019-11-16',
+    },
+    {
+      nick: 'Adam',
+      score: 7,
+      total: 9,
+      type: 'chemia',
+      date: '2019-11-21',
+    },
+    {
+      nick: 'Edward',
+      score: 22,
+      total: 33,
+      type: 'biologia',
+      date: '2019-10-01',
+    },
+    {
+      nick: 'Marek',
+      score: 18,
+      total: 20,
+      type: 'historia',
+      date: '2019-11-01',
+    },
+  ];
+};
+
+const createRow = item => {
+  return (
+    <View style={styles.item} key={Math.random() * 10000 * Math.random()}>
+      <Text>{item.nick}</Text>
+      <Text>{item.score}</Text>
+      <Text>{item.total}</Text>
+      <Text>{item.type}</Text>
+      <Text>{item.date}</Text>
+    </View>
+  );
+};
+
+const createSeparator = () => {
+  return (
+    <View>
+      <Text>-----------------------------------</Text>
+    </View>
+  );
+};
+
+const ResultsScreen = () => {
+
+  const [resultsData, setResultsData] = useState(getResults());
+
+  return (
+    <>
+      <View style={styles.container}>
+        <FlatList
+          ItemSeparatorComponent={() => createSeparator()}
+          data={resultsData}
+          renderItem={({item}) => createRow(item)}
+          keyExtractor={(item, index) => {
+            index.toString();
+          }}
+        />
+      </View>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -19,6 +80,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  item: {
+    backgroundColor: 'dodgerblue',
+    flex: 1,
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
 });
 
-export default QuizScreen;
+export default ResultsScreen;
