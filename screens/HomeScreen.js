@@ -2,12 +2,14 @@ import React from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import SplashScreen from 'react-native-splash-screen';
-import {navigate} from '../navigation/NavigationUtils';
+import {navigate, showDrawer } from '../navigation/NavigationUtils';
 import {
   REGULATIONS_SCREEN,
   QUIZ_SCREEN,
   SHOW_REGULATIONS_SCREEN_STORAGE,
 } from '../Constants';
+
+import {Navigation} from 'react-native-navigation';
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -21,6 +23,7 @@ class HomeScreen extends React.Component {
 
   componentDidMount() {
     SplashScreen.hide();
+    Navigation.events().registerNavigationButtonPressedListener(({componentId}) => showDrawer(componentId));
   }
 
   shouldShowRegulationsScreen = async () => {
