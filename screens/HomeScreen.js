@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, Text, TouchableOpacity, FlatList} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import SplashScreen from 'react-native-splash-screen';
+import {Navigation} from 'react-native-navigation';
 import {navigate, showDrawer} from '../navigation/NavigationUtils';
 import {
   REGULATIONS_SCREEN,
@@ -9,7 +10,7 @@ import {
   SHOW_REGULATIONS_SCREEN_STORAGE,
 } from '../Constants';
 
-import {Navigation} from 'react-native-navigation';
+import QuizContext from '../QuizContext';
 
 const getQuizzes = () => {
   return [
@@ -159,8 +160,11 @@ const createItem = (quiz, index) => {
     <TouchableOpacity
       style={styles.item}
       key={Math.random() * 10000 * Math.random()}
-      onPress={() => navigate(QUIZ_SCREEN, {quiz: quiz})}>
-      <Text>Quiz #{index+1}</Text>
+      onPress={() => {
+        QuizContext.setCurrentQuiz(quiz);
+        navigate(QUIZ_SCREEN, {questionIndex: index})
+      }}>
+      <Text>Quiz #{index + 1}</Text>
       <Text>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat
         lectus et justo lacinia pharetra. Aliquam rutrum maximus gravida.
