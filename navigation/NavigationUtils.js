@@ -10,9 +10,10 @@ export const hideDrawer = componentId =>
 
 export const showDrawer = componentId => setDrawerVisibility(componentId, true);
 
-export const navigate = targetComponentName => {
+export const navigate = (targetComponentName, props) => {
   setNavigationRoot({
     name: targetComponentName,
+    passProps: props,
   });
 };
 

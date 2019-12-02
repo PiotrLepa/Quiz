@@ -69,9 +69,7 @@ const ResultsScreen = () => {
           ItemSeparatorComponent={() => createSeparator()}
           data={resultsData}
           renderItem={({item}) => createItem(item)}
-          keyExtractor={(item, index) => {
-            index.toString();
-          }}
+          keyExtractor={(item, index) => index.toString()}
         />
       </View>
     </>
