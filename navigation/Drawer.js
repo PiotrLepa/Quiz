@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 
 import {navigate} from './NavigationUtils';
-import {HOME_SCREEN, QUIZ_SCREEN} from '../Constants';
+import {HOME_SCREEN, QUIZ_SCREEN, RESULTS_SCREEN} from '../Constants';
 
 class Drawer extends React.Component {
   render() {
@@ -13,12 +13,17 @@ class Drawer extends React.Component {
           <TouchableOpacity
             style={styles.buttonContainer}
             onPress={() => navigate(HOME_SCREEN)}>
-            <Text style={styles.buttonText}>QuizScreen</Text>
+            <Text style={styles.buttonText}>Home</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={() => navigate(RESULTS_SCREEN)}>
+            <Text style={styles.buttonText}>Results</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonContainer}
             onPress={() => navigate(QUIZ_SCREEN)}>
-            <Text style={styles.buttonText}>HomeScreen</Text>
+            <Text style={styles.buttonText}>Quiz</Text>
           </TouchableOpacity>
         </View>
       </>
