@@ -5,11 +5,11 @@ import {navigate} from '../navigation/NavigationUtils';
 
 import {HOME_SCREEN} from '../Constants';
 
-const QuizScreen = () => {
+const QuizScreen = props => {
   return (
     <>
       <View style={styles.container}>
-        <Text>QuizScreen</Text>
+        <Text>{props.quiz[0].question}</Text>
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={() => navigate(HOME_SCREEN)}>
@@ -18,7 +18,7 @@ const QuizScreen = () => {
       </View>
     </>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

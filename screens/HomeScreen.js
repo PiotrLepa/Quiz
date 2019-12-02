@@ -84,6 +84,28 @@ const getQuizzes = () => {
     ],
     [
       {
+        question: '2+2*2 to: ',
+        answers: [
+          {
+            content: '8',
+            isCorrect: false,
+          },
+          {
+            content: '6',
+            isCorrect: true,
+          },
+          {
+            content: '12',
+            isCorrect: false,
+          },
+          {
+            content: '9',
+            isCorrect: false,
+          },
+        ],
+        duration: 30,
+      },
+      {
         question:
           'Który wódz po śmierci Gajusza Mariusza, prowadził wojnę domową z Sullą?',
         answers: [
@@ -128,42 +150,23 @@ const getQuizzes = () => {
         ],
         duration: 30,
       },
-      {
-        question: '2+2*2 to: ',
-        answers: [
-          {
-            content: '8',
-            isCorrect: false,
-          },
-          {
-            content: '6',
-            isCorrect: true,
-          },
-          {
-            content: '12',
-            isCorrect: false,
-          },
-          {
-            content: '9',
-            isCorrect: false,
-          },
-        ],
-        duration: 30,
-      },
     ],
   ];
 };
 
-const createItem = index => {
+const createItem = (quiz, index) => {
   return (
-    <View style={styles.item} key={Math.random() * 10000 * Math.random()}>
-      <Text>Quiz #{index}</Text>
+    <TouchableOpacity
+      style={styles.item}
+      key={Math.random() * 10000 * Math.random()}
+      onPress={() => navigate(QUIZ_SCREEN, {quiz: quiz})}>
+      <Text>Quiz #{index+1}</Text>
       <Text>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat
         lectus et justo lacinia pharetra. Aliquam rutrum maximus gravida.
         Aliquam et sapien neque.
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -213,7 +216,7 @@ const HomeScreen = () => {
         <FlatList
           ItemSeparatorComponent={() => createSeparator()}
           data={quizzesData}
-          renderItem={({index}) => createItem(index)}
+          renderItem={({item, index}) => createItem(item, index)}
           keyExtractor={(item, index) => index.toString()}
         />
         <TouchableOpacity
