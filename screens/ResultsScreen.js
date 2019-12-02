@@ -34,7 +34,7 @@ const getResults = () => {
   ];
 };
 
-const createRow = item => {
+const createItem = item => {
   return (
     <View style={styles.item} key={Math.random() * 10000 * Math.random()}>
       <Text>{item.nick}</Text>
@@ -48,14 +48,18 @@ const createRow = item => {
 
 const createSeparator = () => {
   return (
-    <View>
-      <Text>-----------------------------------</Text>
-    </View>
+    <View
+      style={{
+        height: 1,
+        width: '86%',
+        backgroundColor: '#CED0CE',
+        marginLeft: '14%',
+      }}
+    />
   );
 };
 
 const ResultsScreen = () => {
-
   const [resultsData, setResultsData] = useState(getResults());
 
   return (
@@ -64,7 +68,7 @@ const ResultsScreen = () => {
         <FlatList
           ItemSeparatorComponent={() => createSeparator()}
           data={resultsData}
-          renderItem={({item}) => createRow(item)}
+          renderItem={({item}) => createItem(item)}
           keyExtractor={(item, index) => {
             index.toString();
           }}

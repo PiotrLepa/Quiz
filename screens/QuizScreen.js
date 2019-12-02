@@ -5,21 +5,19 @@ import {navigate} from '../navigation/NavigationUtils';
 
 import {HOME_SCREEN} from '../Constants';
 
-class QuizScreen extends React.Component {
-  render() {
-    return (
-      <>
-        <View style={styles.container}>
-          <Text>QuizScreen</Text>
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={() => navigate(HOME_SCREEN)}>
-            <Text style={styles.buttonText}>HomeScreen</Text>
-          </TouchableOpacity>
-        </View>
-      </>
-    );
-  }
+const QuizScreen = () => {
+  return (
+    <>
+      <View style={styles.container}>
+        <Text>QuizScreen</Text>
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={() => navigate(HOME_SCREEN)}>
+          <Text style={styles.buttonText}>HomeScreen</Text>
+        </TouchableOpacity>
+      </View>
+    </>
+  );
 }
 
 const styles = StyleSheet.create({

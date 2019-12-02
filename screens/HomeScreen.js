@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import SplashScreen from 'react-native-splash-screen';
@@ -11,46 +11,42 @@ import {
 
 import {Navigation} from 'react-native-navigation';
 
-class HomeScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    this.shouldShowRegulationsScreen().then(shouldShow => {
+
+const shouldShowRegulationsScreen = async () => {
+  try {
+    const showRegulationsScreen = await AsyncStorage.getItem(
+      SHOW_REGULATIONS_SCREEN_STORAGE,
+    );
+    return showRegulationsScreen === null;
+  } catch (e) {
+    return true;
+  }
+};
+
+const HomeScreen = () => {
+
+  useEffect(() => {
+    SplashScreen.hide();
+    Navigation.events().registerNavigationButtonPressedListener(({componentId}) => showDrawer(componentId));
+    shouldShowRegulationsScreen().then(shouldShow => {
       if (shouldShow) {
         navigate(REGULATIONS_SCREEN);
       }
     });
-  }
+  });
 
-  componentDidMount() {
-    SplashScreen.hide();
-    Navigation.events().registerNavigationButtonPressedListener(({componentId}) => showDrawer(componentId));
-  }
-
-  shouldShowRegulationsScreen = async () => {
-    try {
-      const showRegulationsScreen = await AsyncStorage.getItem(
-        SHOW_REGULATIONS_SCREEN_STORAGE,
-      );
-      return showRegulationsScreen === null;
-    } catch (e) {
-      return true;
-    }
-  };
-
-  render() {
-    return (
-      <>
-        <View style={styles.container}>
-          <Text>HomeScreen</Text>
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={() => navigate(QUIZ_SCREEN)}>
-            <Text style={styles.buttonText}>QuizScreen</Text>
-          </TouchableOpacity>
-        </View>
-      </>
-    );
-  }
+  return (
+    <>
+      <View style={styles.container}>
+        <Text>HomeScreen</Text>
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={() => navigate(QUIZ_SCREEN)}>
+          <Text style={styles.buttonText}>QuizScreen</Text>
+        </TouchableOpacity>
+      </View>
+    </>
+  );
 }
 
 const styles = StyleSheet.create({
