@@ -3,6 +3,8 @@ import {StyleSheet, View, Text, TouchableOpacity, FlatList} from 'react-native';
 import {navigate} from '../navigation/NavigationUtils';
 import {HOME_SCREEN, RESULTS_SCREEN, QUIZ_SCREEN} from '../Constants';
 
+import TimerIndicator from '../components/TimerIndicator';
+
 import QuizContext from '../QuizContext';
 
 const createSeparator = () => {
@@ -23,17 +25,20 @@ const createItem = (answer, questionIndex) => {
     <TouchableOpacity
       style={styles.item}
       key={Math.random() * 10000 * Math.random()}
-      onPress={() => {
-        QuizContext.saveUserAnswer(questionIndex, answer.correct);
-        if (QuizContext.isLastQuestion(questionIndex)) {
-          navigate(RESULTS_SCREEN);
-        } else {
-          navigate(QUIZ_SCREEN, {questionIndex: questionIndex + 1});
-        }
-      }}>
-      <Text>{answer.content}</Text>
+      onPress={() => handleUserAnswer(questionIndex, answer.correct)}>
+      <Text style={styles.answerText}>{answer.content}</Text>
     </TouchableOpacity>
   );
+};
+
+const handleUserAnswer = (questionIndex, isCorrect) => {
+  console.log('handleUserAnswer');
+  QuizContext.saveUserAnswer(questionIndex, isCorrect);
+  if (QuizContext.isLastQuestion(questionIndex)) {
+    navigate(RESULTS_SCREEN);
+  } else {
+    navigate(QUIZ_SCREEN, {questionIndex: questionIndex + 1});
+  }
 };
 
 const QuizScreen = ({questionIndex}) => {
@@ -42,7 +47,12 @@ const QuizScreen = ({questionIndex}) => {
   return (
     <>
       <View style={styles.container}>
-        <Text>{question.question}</Text>
+        <TimerIndicator
+          styles={{flex: 1}}
+          maxValue={15}
+          onTimeOver={() => handleUserAnswer(questionIndex, false)}
+        />
+        <Text style={styles.questionText}>{question.question}</Text>
         <FlatList
           ItemSeparatorComponent={() => createSeparator()}
           data={question.answers}
@@ -62,18 +72,15 @@ const QuizScreen = ({questionIndex}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  buttonText: {
+  questionText: {
     fontSize: 32,
-    color: 'white',
   },
-  buttonContainer: {
-    backgroundColor: 'dodgerblue',
-    margin: 12,
-    padding: 16,
-    borderRadius: 24,
+  answerText: {
+    fontSize: 25,
   },
 });
 
