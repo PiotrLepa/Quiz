@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import {navigate} from '../navigation/NavigationUtils';
+import {push} from '../navigation/NavigationUtils';
 import {HOME_SCREEN, SHOW_REGULATIONS_SCREEN_STORAGE} from '../Constants';
 
 const saveToStorage = async () => {
@@ -16,7 +16,7 @@ const saveToStorage = async () => {
   }
 };
 
-const RegulationsScreen = () => {
+const RegulationsScreen = ({componentId}) => {
   useEffect(() => {
     saveToStorage();
   });
@@ -28,7 +28,7 @@ const RegulationsScreen = () => {
         <Text>Przechodząc dalej akceptujesz regulamin</Text>
         <TouchableOpacity
           style={styles.buttonContainer}
-          onPress={() => navigate(HOME_SCREEN)}>
+          onPress={() => push(componentId, HOME_SCREEN)}>
           <Text style={styles.buttonText}>HOME SCREEN</Text>
         </TouchableOpacity>
       </View>

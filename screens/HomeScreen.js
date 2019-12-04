@@ -10,7 +10,7 @@ import {
 import AsyncStorage from '@react-native-community/async-storage';
 import SplashScreen from 'react-native-splash-screen';
 import {Navigation} from 'react-native-navigation';
-import {navigate, showDrawer} from '../navigation/NavigationUtils';
+import {push, showDrawer} from '../navigation/NavigationUtils';
 import {
   REGULATIONS_SCREEN,
   QUIZ_SCREEN,
@@ -162,14 +162,14 @@ const getQuizzes = () => {
   ];
 };
 
-const createItem = (quiz, index) => {
+const createItem = (quiz, index, componentId) => {
   return (
     <View style={styles.quizContainer}>
       <TouchableOpacity
         key={Math.random() * 10000 * Math.random()}
         onPress={() => {
           QuizContext.setCurrentQuiz(quiz);
-          navigate(QUIZ_SCREEN, {questionIndex: index});
+          push(componentId, QUIZ_SCREEN, {questionIndex: index});
         }}>
         <Text style={styles.quizTitle}>Quiz #{index + 1}</Text>
         <Text style={styles.quizDescription}>
@@ -193,7 +193,7 @@ const shouldShowRegulationsScreen = async () => {
   }
 };
 
-const HomeScreen = () => {
+const HomeScreen = ({componentId}) => {
   useEffect(() => {
     SplashScreen.hide();
     Navigation.events().registerNavigationButtonPressedListener(
@@ -201,7 +201,7 @@ const HomeScreen = () => {
     );
     shouldShowRegulationsScreen().then(shouldShow => {
       if (shouldShow) {
-        navigate(REGULATIONS_SCREEN);
+        push(componentId, REGULATIONS_SCREEN);
       }
     });
   });
@@ -220,13 +220,13 @@ const HomeScreen = () => {
       <View style={styles.container}>
         <FlatList
           data={quizzesData}
-          renderItem={({item, index}) => createItem(item, index)}
+          renderItem={({item, index}) => createItem(item, index, componentId)}
           keyExtractor={(item, index) => index.toString()}
           refreshControl={
             <RefreshControl
               onRefresh={refreshQuizzes}
               refreshing={isRefreshing}
-              tintColor='dodgerblue'
+              tintColor="dodgerblue"
               colors={['dodgerblue']}
             />
           }

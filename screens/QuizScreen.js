@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, Text, TouchableOpacity, FlatList} from 'react-native';
-import {navigate} from '../navigation/NavigationUtils';
+import {pop, pushAndPop} from '../navigation/NavigationUtils';
 import {HOME_SCREEN, RESULTS_SCREEN, QUIZ_SCREEN} from '../Constants';
 
 import AppButton from '../components/AppButton';
@@ -8,28 +8,27 @@ import TimerIndicator from '../components/TimerIndicator';
 
 import QuizContext from '../QuizContext';
 
-const createItem = (answer, questionIndex) => {
-  console.log('answer: ', answer);
+const createItem = (answer, questionIndex, componentId) => {
   return (
     <TouchableOpacity
       style={styles.item}
       key={Math.random() * 10000 * Math.random()}
-      onPress={() => handleUserAnswer(questionIndex, answer.isCorrect)}>
+      onPress={() => handleUserAnswer(questionIndex, answer.isCorrect, componentId)}>
       <Text style={styles.answerText}>{answer.content}</Text>
     </TouchableOpacity>
   );
 };
 
-const handleUserAnswer = (questionIndex, isCorrect) => {
+const handleUserAnswer = (questionIndex, isCorrect, componentId) => {
   QuizContext.saveUserAnswer(questionIndex, isCorrect);
   if (QuizContext.isLastQuestion(questionIndex)) {
-    navigate(RESULTS_SCREEN);
+    pushAndPop(componentId, RESULTS_SCREEN);
   } else {
-    navigate(QUIZ_SCREEN, {questionIndex: questionIndex + 1});
+    pushAndPop(componentId, QUIZ_SCREEN, {questionIndex: questionIndex + 1});
   }
 };
 
-const QuizScreen = ({questionIndex}) => {
+const QuizScreen = ({questionIndex, componentId}) => {
   const question = QuizContext.getQuestion(questionIndex);
 
   return (
@@ -38,18 +37,18 @@ const QuizScreen = ({questionIndex}) => {
         <TimerIndicator
           styles={{flex: 1}}
           maxValue={question.duration}
-          onTimeOver={() => handleUserAnswer(questionIndex, false)}
+          onTimeOver={() => handleUserAnswer(questionIndex, false, componentId)}
         />
         <Text style={styles.questionText}>{question.question}</Text>
         <FlatList
         style={styles.answerList}
           data={question.answers}
-          renderItem={({item}) => createItem(item, questionIndex)}
+          renderItem={({item}) => createItem(item, questionIndex, componentId)}
           keyExtractor={(item, index) => index.toString()}
         />
         <AppButton
           style={styles.button}
-          onPress={() => navigate(HOME_SCREEN)}
+          onPress={() => pop(componentId, HOME_SCREEN)}
           text="Cancel"
         />
       </View>

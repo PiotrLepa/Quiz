@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 
-import {navigate} from './NavigationUtils';
+import {navigateAndClearStack} from './NavigationUtils';
 import {HOME_SCREEN, RESULTS_SCREEN} from '../Constants';
 import AppButton from '../components/AppButton';
 
@@ -13,12 +13,12 @@ class Drawer extends React.Component {
           <AppButton
             style={styles.button}
             text="Home"
-            onPress={() => navigate(HOME_SCREEN)}
+            onPress={() => navigateAndClearStack('drawerId', HOME_SCREEN)}
           />
           <AppButton
             style={styles.button}
             text="Results"
-            onPress={() => navigate(RESULTS_SCREEN)}
+            onPress={() => navigateAndClearStack('drawerId', RESULTS_SCREEN)}
           />
         </View>
       </>
