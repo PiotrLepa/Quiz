@@ -1,10 +1,12 @@
-import React, {useEffect} from 'react';
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import React from 'react';
+import {StyleSheet, View, Text} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import {dismissModal} from '../navigation/NavigationUtils';
+import {SHOW_REGULATIONS_SCREEN_STORAGE} from '../Constants';
+import AppButton from '../components/AppButton';
 
-import {navigate} from '../navigation/NavigationUtils';
-import {HOME_SCREEN, SHOW_REGULATIONS_SCREEN_STORAGE} from '../Constants';
-
+const RegulationsScreen = ({componentId}) => {
+  
 const saveToStorage = async () => {
   try {
     await AsyncStorage.setItem(
@@ -16,21 +18,22 @@ const saveToStorage = async () => {
   }
 };
 
-const RegulationsScreen = () => {
-  useEffect(() => {
-    saveToStorage();
-  });
-
   return (
     <>
       <View style={styles.container}>
-        <Text>Regulamin</Text>
-        <Text>Przechodząc dalej akceptujesz regulamin</Text>
-        <TouchableOpacity
+        <View style={styles.contentContainer}>
+          <Text style={styles.contentText}>
+          You have to accept the terms and conditions.
+          </Text>
+        </View>
+        <AppButton
           style={styles.buttonContainer}
-          onPress={() => navigate(HOME_SCREEN)}>
-          <Text style={styles.buttonText}>HOME SCREEN</Text>
-        </TouchableOpacity>
+          onPress={() => {
+            saveToStorage();
+            dismissModal(componentId);
+          }}
+          text="Accept"
+        />
       </View>
     </>
   );
@@ -42,15 +45,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  buttonText: {
-    fontSize: 32,
-    color: 'white',
+  contentContainer: {
+    padding: 12,
+    margin: 24,
+    borderColor: 'dodgerblue',
+    borderRadius: 20,
+    borderWidth: 1,
+  },
+  contentText: {
+    fontSize: 24,
+    textAlign: 'center',
   },
   buttonContainer: {
-    backgroundColor: 'dodgerblue',
-    margin: 12,
-    padding: 16,
-    borderRadius: 24,
+    width: '80%',
+    marginVertical: 32,
   },
 });
 

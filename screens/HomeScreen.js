@@ -10,7 +10,7 @@ import {
 import AsyncStorage from '@react-native-community/async-storage';
 import SplashScreen from 'react-native-splash-screen';
 import {Navigation} from 'react-native-navigation';
-import {navigate, showDrawer} from '../navigation/NavigationUtils';
+import {push, showDrawer, showModal} from '../navigation/NavigationUtils';
 import {
   REGULATIONS_SCREEN,
   QUIZ_SCREEN,
@@ -162,38 +162,11 @@ const getQuizzes = () => {
   ];
 };
 
-const createItem = (quiz, index) => {
-  return (
-    <View style={styles.quizContainer}>
-      <TouchableOpacity
-        key={Math.random() * 10000 * Math.random()}
-        onPress={() => {
-          QuizContext.setCurrentQuiz(quiz);
-          navigate(QUIZ_SCREEN, {questionIndex: index});
-        }}>
-        <Text style={styles.quizTitle}>Quiz #{index + 1}</Text>
-        <Text style={styles.quizDescription}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat
-          lectus et justo lacinia pharetra. Aliquam rutrum maximus gravida.
-          Aliquam et sapien neque.
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
+const HomeScreen = ({componentId}) => {
+  const [quizzesData, setQuizzesData] = useState(getQuizzes());
 
-const shouldShowRegulationsScreen = async () => {
-  try {
-    const showRegulationsScreen = await AsyncStorage.getItem(
-      SHOW_REGULATIONS_SCREEN_STORAGE,
-    );
-    return showRegulationsScreen === null;
-  } catch (e) {
-    return true;
-  }
-};
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-const HomeScreen = () => {
   useEffect(() => {
     SplashScreen.hide();
     Navigation.events().registerNavigationButtonPressedListener(
@@ -201,18 +174,45 @@ const HomeScreen = () => {
     );
     shouldShowRegulationsScreen().then(shouldShow => {
       if (shouldShow) {
-        navigate(REGULATIONS_SCREEN);
+        showModal(REGULATIONS_SCREEN);
       }
     });
   });
 
-  const [quizzesData, setQuizzesData] = useState(getQuizzes());
-
-  const [isRefreshing, setIsRefreshing] = useState(false);
-
   const refreshQuizzes = () => {
     setIsRefreshing(true);
     setTimeout(() => setIsRefreshing(false), 1500);
+  };
+
+  const createItem = (quiz, index) => {
+    return (
+      <View style={styles.quizContainer}>
+        <TouchableOpacity
+          key={Math.random() * 10000 * Math.random()}
+          onPress={() => {
+            QuizContext.setCurrentQuiz(quiz);
+            push(componentId, QUIZ_SCREEN);
+          }}>
+          <Text style={styles.quizTitle}>Quiz #{index + 1}</Text>
+          <Text style={styles.quizDescription}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+            volutpat lectus et justo lacinia pharetra. Aliquam rutrum maximus
+            gravida. Aliquam et sapien neque.
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  const shouldShowRegulationsScreen = async () => {
+    try {
+      const showRegulationsScreen = await AsyncStorage.getItem(
+        SHOW_REGULATIONS_SCREEN_STORAGE,
+      );
+      return showRegulationsScreen === null;
+    } catch (e) {
+      return true;
+    }
   };
 
   return (
@@ -226,7 +226,7 @@ const HomeScreen = () => {
             <RefreshControl
               onRefresh={refreshQuizzes}
               refreshing={isRefreshing}
-              tintColor='dodgerblue'
+              tintColor="dodgerblue"
               colors={['dodgerblue']}
             />
           }

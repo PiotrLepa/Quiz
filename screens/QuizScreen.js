@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, View, Text, TouchableOpacity, FlatList} from 'react-native';
-import {navigate} from '../navigation/NavigationUtils';
+import {navigateAndClearStack} from '../navigation/NavigationUtils';
 import {HOME_SCREEN, RESULTS_SCREEN, QUIZ_SCREEN} from '../Constants';
 
 import AppButton from '../components/AppButton';
@@ -8,29 +8,32 @@ import TimerIndicator from '../components/TimerIndicator';
 
 import QuizContext from '../QuizContext';
 
-const createItem = (answer, questionIndex) => {
-  console.log('answer: ', answer);
-  return (
-    <TouchableOpacity
-      style={styles.item}
-      key={Math.random() * 10000 * Math.random()}
-      onPress={() => handleUserAnswer(questionIndex, answer.isCorrect)}>
-      <Text style={styles.answerText}>{answer.content}</Text>
-    </TouchableOpacity>
-  );
-};
+const QuizScreen = ({componentId}) => {
+  const [questionIndex, setQuestionIndex] = useState(0);
 
-const handleUserAnswer = (questionIndex, isCorrect) => {
-  QuizContext.saveUserAnswer(questionIndex, isCorrect);
-  if (QuizContext.isLastQuestion(questionIndex)) {
-    navigate(RESULTS_SCREEN);
-  } else {
-    navigate(QUIZ_SCREEN, {questionIndex: questionIndex + 1});
-  }
-};
-
-const QuizScreen = ({questionIndex}) => {
   const question = QuizContext.getQuestion(questionIndex);
+
+  const createItem = answer => {
+    return (
+      <TouchableOpacity
+        style={styles.item}
+        key={Math.random() * 10000 * Math.random()}
+        onPress={() =>
+          handleUserAnswer(questionIndex, answer.isCorrect, componentId)
+        }>
+        <Text style={styles.answerText}>{answer.content}</Text>
+      </TouchableOpacity>
+    );
+  };
+
+  const handleUserAnswer = isCorrect => {
+    QuizContext.saveUserAnswer(questionIndex, isCorrect);
+    if (QuizContext.isLastQuestion(questionIndex)) {
+      navigateAndClearStack(componentId, RESULTS_SCREEN);
+    } else {
+      setQuestionIndex(questionIndex + 1);
+    }
+  };
 
   return (
     <>
@@ -38,18 +41,18 @@ const QuizScreen = ({questionIndex}) => {
         <TimerIndicator
           styles={{flex: 1}}
           maxValue={question.duration}
-          onTimeOver={() => handleUserAnswer(questionIndex, false)}
+          onTimeOver={() => handleUserAnswer(false)}
         />
         <Text style={styles.questionText}>{question.question}</Text>
         <FlatList
-        style={styles.answerList}
+          style={styles.answerList}
           data={question.answers}
-          renderItem={({item}) => createItem(item, questionIndex)}
+          renderItem={({item}) => createItem(item)}
           keyExtractor={(item, index) => index.toString()}
         />
         <AppButton
           style={styles.button}
-          onPress={() => navigate(HOME_SCREEN)}
+          onPress={() => navigateAndClearStack(componentId, HOME_SCREEN)}
           text="Cancel"
         />
       </View>
@@ -64,7 +67,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: '80%',
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   questionText: {
     textAlign: 'center',
@@ -81,7 +84,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderColor: 'dodgerblue',
     borderWidth: 2,
-    borderRadius: 16
+    borderRadius: 16,
   },
 });
 

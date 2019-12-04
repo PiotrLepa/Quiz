@@ -1,3 +1,4 @@
+export const MAIN_STACK_ID = 'MAIN_STACK_ID';
 export const DRAWER = 'Drawer';
 export const REGULATIONS_SCREEN = 'RegulationsScreen';
 export const HOME_SCREEN = 'HomeScreen';
