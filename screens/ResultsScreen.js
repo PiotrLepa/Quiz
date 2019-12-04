@@ -37,26 +37,13 @@ const getResults = () => {
 
 const createItem = item => {
   return (
-    <View style={styles.item} key={Math.random() * 10000 * Math.random()}>
-      <Text>{item.nick}</Text>
-      <Text>{item.score}</Text>
-      <Text>{item.total}</Text>
-      <Text>{item.type}</Text>
-      <Text>{item.date}</Text>
+    <View style={styles.resultContainer} key={Math.random() * 10000 * Math.random()}>
+      <Text style={styles.resultText}>Nick: {item.nick}</Text>
+      <Text style={styles.resultText}>Score: {item.score}</Text>
+      <Text style={styles.resultText}>Total: {item.total}</Text>
+      <Text style={styles.resultText}>Type: {item.type}</Text>
+      <Text style={styles.resultText}>Date: {item.date}</Text>
     </View>
-  );
-};
-
-const createSeparator = () => {
-  return (
-    <View
-      style={{
-        height: 1,
-        width: '86%',
-        backgroundColor: '#CED0CE',
-        marginLeft: '14%',
-      }}
-    />
   );
 };
 
@@ -81,7 +68,6 @@ const ResultsScreen = () => {
       <View style={styles.container}>
         {renderCurrentQuizResult()}
         <FlatList
-          ItemSeparatorComponent={() => createSeparator()}
           data={resultsData}
           renderItem={({item}) => createItem(item)}
           keyExtractor={(item, index) => index.toString()}
@@ -95,12 +81,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  item: {
+  resultContainer: {
     backgroundColor: 'dodgerblue',
     flex: 1,
-    padding: 20,
+    padding: 12,
     marginVertical: 8,
     marginHorizontal: 16,
+    borderRadius: 16,
+    elevation: 6,
+  },
+  resultText: {
+    color: 'white',
+    fontSize: 15,
   },
   userResult: {
     fontSize: 35,

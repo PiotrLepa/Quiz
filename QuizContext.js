@@ -14,8 +14,6 @@ export default class QuizContext {
 
   static _calculateUserResult() {
     return this.completedQuestions.reduce((acc, question) => {
-      console.log(`acc: ${acc}`);
-      console.log('question:', question);
       if (question.userAnsweredCorrect) {
         return acc + 1;
       }
@@ -28,7 +26,6 @@ export default class QuizContext {
   }
 
   static saveUserAnswer(index, correct) {
-    console.log('correct:', correct);
     const question = this.getQuestion(index);
     this.completedQuestions.push({
       ...question,

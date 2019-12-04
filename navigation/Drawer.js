@@ -1,24 +1,25 @@
 import React from 'react';
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 import {navigate} from './NavigationUtils';
 import {HOME_SCREEN, RESULTS_SCREEN} from '../Constants';
+import AppButton from '../components/AppButton';
 
 class Drawer extends React.Component {
   render() {
     return (
       <>
         <View style={styles.container}>
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={() => navigate(HOME_SCREEN)}>
-            <Text style={styles.buttonText}>Home</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={() => navigate(RESULTS_SCREEN)}>
-            <Text style={styles.buttonText}>Results</Text>
-          </TouchableOpacity>
+          <AppButton
+            style={styles.button}
+            text="Home"
+            onPress={() => navigate(HOME_SCREEN)}
+          />
+          <AppButton
+            style={styles.button}
+            text="Results"
+            onPress={() => navigate(RESULTS_SCREEN)}
+          />
         </View>
       </>
     );
@@ -32,15 +33,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'white',
   },
-  buttonText: {
-    fontSize: 32,
-    color: 'white',
-  },
-  buttonContainer: {
-    backgroundColor: 'dodgerblue',
-    margin: 12,
-    padding: 16,
-    borderRadius: 24,
+  button: {
+    marginVertical: 20,
+    width: '60%',
   },
 });
 

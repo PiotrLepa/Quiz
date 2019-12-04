@@ -104,7 +104,7 @@ const getQuizzes = () => {
             isCorrect: false,
           },
         ],
-        duration: 30,
+        duration: 15,
       },
       {
         question:
@@ -127,7 +127,7 @@ const getQuizzes = () => {
             isCorrect: false,
           },
         ],
-        duration: 30,
+        duration: 15,
       },
       {
         question: 'Który mamy wiek?',
@@ -149,7 +149,7 @@ const getQuizzes = () => {
             isCorrect: false,
           },
         ],
-        duration: 30,
+        duration: 15,
       },
     ],
   ];
@@ -157,33 +157,21 @@ const getQuizzes = () => {
 
 const createItem = (quiz, index) => {
   return (
-    <TouchableOpacity
-      style={styles.item}
+    <View style={styles.quizContainer}>
+      <TouchableOpacity
       key={Math.random() * 10000 * Math.random()}
       onPress={() => {
         QuizContext.setCurrentQuiz(quiz);
-        navigate(QUIZ_SCREEN, {questionIndex: index})
+        navigate(QUIZ_SCREEN, {questionIndex: index});
       }}>
-      <Text>Quiz #{index + 1}</Text>
-      <Text>
+      <Text style={styles.quizTitle}>Quiz #{index + 1}</Text>
+      <Text style={styles.quizDescription}>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat
         lectus et justo lacinia pharetra. Aliquam rutrum maximus gravida.
         Aliquam et sapien neque.
       </Text>
     </TouchableOpacity>
-  );
-};
-
-const createSeparator = () => {
-  return (
-    <View
-      style={{
-        height: 1,
-        width: '86%',
-        backgroundColor: '#CED0CE',
-        marginLeft: '14%',
-      }}
-    />
+    </View>
   );
 };
 
@@ -217,7 +205,6 @@ const HomeScreen = () => {
     <>
       <View style={styles.container}>
         <FlatList
-          ItemSeparatorComponent={() => createSeparator()}
           data={quizzesData}
           renderItem={({item, index}) => createItem(item, index)}
           keyExtractor={(item, index) => index.toString()}
@@ -233,16 +220,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  buttonText: {
-    fontSize: 32,
-    color: 'white',
-  },
-  item: {
+  quizContainer: {
     backgroundColor: 'dodgerblue',
     flex: 1,
-    padding: 20,
+    padding: 12,
     marginVertical: 8,
     marginHorizontal: 16,
+    borderRadius: 16,
+    elevation: 6,
+  },
+  quizTitle: {
+    textAlign: 'center',
+    fontSize: 25,
+    color: 'white',
+    padding: 12,
+  },
+  quizDescription: {
+    textAlign: 'center',
+    fontSize: 15,
+    color: 'white',
+    padding: 8,
   },
 });
 

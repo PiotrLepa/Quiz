@@ -50,6 +50,7 @@ const TimerIndicator = ({maxValue, onTimeOver}) => {
           styleAttr="Horizontal"
           progress={convertTimerToProgress()}
           indeterminate={false}
+          color="dodgerblue"
         />
       ) : (
         <ProgressViewIOS progress={convertTimerToProgress()} />
