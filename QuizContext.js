@@ -1,9 +1,35 @@
 export default class QuizContext {
-  completedQuestions = [];
+  static completedQuestions = [];
+
+  static getPointsResult() {
+    if (this.completedQuestions.length == 0) return null;
+
+    const score =  this._calculateUserResult();
+    const maxPoints = this.completedQuestions.length;
+    return {
+      score,
+      maxPoints
+    };
+  }
+
+  static _calculateUserResult() {
+    return this.completedQuestions.reduce((acc, question) => {
+      console.log(`acc: ${acc}`);
+      console.log('question:', question);
+      if (question.userAnsweredCorrect) {
+        return acc + 1;
+      }
+      return acc;
+    }, 0);
+  }
+
+  static getResult() {
+    return this.completedQuestions;
+  }
 
   static saveUserAnswer(index, correct) {
+    console.log('correct:', correct);
     const question = this.getQuestion(index);
-    console.log(question);
     this.completedQuestions.push({
       ...question,
       userAnsweredCorrect: correct,

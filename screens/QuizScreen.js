@@ -21,18 +21,18 @@ const createSeparator = () => {
 };
 
 const createItem = (answer, questionIndex) => {
+  console.log('answer: ', answer)
   return (
     <TouchableOpacity
       style={styles.item}
       key={Math.random() * 10000 * Math.random()}
-      onPress={() => handleUserAnswer(questionIndex, answer.correct)}>
+      onPress={() => handleUserAnswer(questionIndex, answer.isCorrect)}>
       <Text style={styles.answerText}>{answer.content}</Text>
     </TouchableOpacity>
   );
 };
 
 const handleUserAnswer = (questionIndex, isCorrect) => {
-  console.log('handleUserAnswer');
   QuizContext.saveUserAnswer(questionIndex, isCorrect);
   if (QuizContext.isLastQuestion(questionIndex)) {
     navigate(RESULTS_SCREEN);

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, FlatList} from 'react-native';
+import QuizContext from '../QuizContext';
 
 const getResults = () => {
   return [
@@ -62,9 +63,23 @@ const createSeparator = () => {
 const ResultsScreen = () => {
   const [resultsData, setResultsData] = useState(getResults());
 
+  const renderCurrentQuizResult = () => {
+    const result = QuizContext.getPointsResult();
+    QuizContext.clear();
+
+    console.log(result);
+    if (result === null) return <View></View>;
+    return (
+      <Text style={styles.userResult}>
+        You answered correct to {result.score} of {result.maxPoints}
+      </Text>
+    );
+  };
+
   return (
     <>
       <View style={styles.container}>
+        {renderCurrentQuizResult()}
         <FlatList
           ItemSeparatorComponent={() => createSeparator()}
           data={resultsData}
@@ -79,8 +94,6 @@ const ResultsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   item: {
     backgroundColor: 'dodgerblue',
@@ -88,6 +101,11 @@ const styles = StyleSheet.create({
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
+  },
+  userResult: {
+    fontSize: 35,
+    textAlign: 'center',
+    padding: 20,
   },
 });
 

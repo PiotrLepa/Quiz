@@ -216,18 +216,12 @@ const HomeScreen = () => {
   return (
     <>
       <View style={styles.container}>
-        <Text>HomeScreen</Text>
         <FlatList
           ItemSeparatorComponent={() => createSeparator()}
           data={quizzesData}
           renderItem={({item, index}) => createItem(item, index)}
           keyExtractor={(item, index) => index.toString()}
         />
-        <TouchableOpacity
-          style={styles.buttonContainer}
-          onPress={() => navigate(QUIZ_SCREEN)}>
-          <Text style={styles.buttonText}>QuizScreen</Text>
-        </TouchableOpacity>
       </View>
     </>
   );
@@ -242,12 +236,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 32,
     color: 'white',
-  },
-  buttonContainer: {
-    backgroundColor: 'dodgerblue',
-    margin: 12,
-    padding: 16,
-    borderRadius: 24,
   },
   item: {
     backgroundColor: 'dodgerblue',
