@@ -1,29 +1,26 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-
 import {navigateAndClearStack} from './NavigationUtils';
-import {HOME_SCREEN, RESULTS_SCREEN} from '../Constants';
+import {MAIN_STACK_ID, HOME_SCREEN, RESULTS_SCREEN} from '../Constants';
 import AppButton from '../components/AppButton';
 
-class Drawer extends React.Component {
-  render() {
-    return (
-      <>
-        <View style={styles.container}>
-          <AppButton
-            style={styles.button}
-            text="Home"
-            onPress={() => navigateAndClearStack('drawerId', HOME_SCREEN)}
-          />
-          <AppButton
-            style={styles.button}
-            text="Results"
-            onPress={() => navigateAndClearStack('drawerId', RESULTS_SCREEN)}
-          />
-        </View>
-      </>
-    );
-  }
+const Drawer = () => {
+  return (
+    <>
+      <View style={styles.container}>
+        <AppButton
+          style={styles.button}
+          text="Home"
+          onPress={() => navigateAndClearStack(MAIN_STACK_ID, HOME_SCREEN)}
+        />
+        <AppButton
+          style={styles.button}
+          text="Results"
+          onPress={() => navigateAndClearStack(MAIN_STACK_ID, RESULTS_SCREEN)}
+        />
+      </View>
+    </>
+  );
 }
 
 const styles = StyleSheet.create({

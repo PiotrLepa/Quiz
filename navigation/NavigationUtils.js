@@ -26,6 +26,15 @@ export const hideDrawer = componentId =>
 
 export const showDrawer = componentId => setDrawerVisibility(componentId, true);
 
+const setDrawerVisibility = (componentId, isVisible) =>
+  Navigation.mergeOptions(componentId, {
+    sideMenu: {
+      left: {
+        visible: isVisible,
+      },
+    },
+  });
+
 export const push = (componentId, targetComponentName, props) => {
   hideDrawer(componentId);
   Navigation.push(componentId, {
@@ -36,7 +45,11 @@ export const push = (componentId, targetComponentName, props) => {
   });
 };
 
-export const navigateAndClearStack = (componentId, targetComponentName, props) => {
+export const navigateAndClearStack = (
+  componentId,
+  targetComponentName,
+  props,
+) => {
   hideDrawer(componentId);
   Navigation.setStackRoot(componentId, {
     component: {
@@ -45,71 +58,3 @@ export const navigateAndClearStack = (componentId, targetComponentName, props) =
     },
   });
 };
-
-export const pop = (componentId, targetComponentName, props) => {
-  Navigation.pop(componentId, {
-    component: {
-      name: targetComponentName,
-      passProps: props,
-    },
-  });
-};
-
-export const pushAndPop = (componentId, targetComponentName, props) => {
-  // push(componentId, targetComponentName, props);
-  // Navigation.setStackRoot(componentId, {
-  //   component: {
-  //     name: HOME_SCREEN,
-  //     passProps: props,
-  //   },
-  // });
-  Navigation.push(componentId, {
-    component: {
-      name: targetComponentName,
-      passProps: props,
-    },
-    stack: {
-      id: MAIN_STACK_ID,
-      children: [
-        {
-          component: {
-            name: HOME_SCREEN
-          },
-        },
-      ],
-    },
-  });
-};
-
-export const setNavigationRoot = component =>
-  Navigation.setRoot({
-    root: {
-      sideMenu: {
-        left: {
-          component: {
-            id: 'drawerId',
-            name: DRAWER,
-          },
-        },
-        center: {
-          stack: {
-            id: MAIN_STACK_ID,
-            children: [
-              {
-                component,
-              },
-            ],
-          },
-        },
-      },
-    },
-  });
-
-const setDrawerVisibility = (componentId, isVisible) =>
-  Navigation.mergeOptions(componentId, {
-    sideMenu: {
-      left: {
-        visible: isVisible,
-      },
-    },
-  });

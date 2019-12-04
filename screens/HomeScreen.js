@@ -162,38 +162,12 @@ const getQuizzes = () => {
   ];
 };
 
-const createItem = (quiz, index, componentId) => {
-  return (
-    <View style={styles.quizContainer}>
-      <TouchableOpacity
-        key={Math.random() * 10000 * Math.random()}
-        onPress={() => {
-          QuizContext.setCurrentQuiz(quiz);
-          push(componentId, QUIZ_SCREEN, {questionIndex: index});
-        }}>
-        <Text style={styles.quizTitle}>Quiz #{index + 1}</Text>
-        <Text style={styles.quizDescription}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat
-          lectus et justo lacinia pharetra. Aliquam rutrum maximus gravida.
-          Aliquam et sapien neque.
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-const shouldShowRegulationsScreen = async () => {
-  try {
-    const showRegulationsScreen = await AsyncStorage.getItem(
-      SHOW_REGULATIONS_SCREEN_STORAGE,
-    );
-    return showRegulationsScreen === null;
-  } catch (e) {
-    return true;
-  }
-};
-
 const HomeScreen = ({componentId}) => {
+
+  const [quizzesData, setQuizzesData] = useState(getQuizzes());
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
   useEffect(() => {
     SplashScreen.hide();
     Navigation.events().registerNavigationButtonPressedListener(
@@ -201,18 +175,45 @@ const HomeScreen = ({componentId}) => {
     );
     shouldShowRegulationsScreen().then(shouldShow => {
       if (shouldShow) {
-        push(componentId, REGULATIONS_SCREEN);
+        push(componentId, REGULATIONS_SCREEN); // TODO to modal screen
       }
     });
   });
 
-  const [quizzesData, setQuizzesData] = useState(getQuizzes());
-
-  const [isRefreshing, setIsRefreshing] = useState(false);
-
   const refreshQuizzes = () => {
     setIsRefreshing(true);
     setTimeout(() => setIsRefreshing(false), 1500);
+  };
+
+  const createItem = (quiz, index) => {
+    return (
+      <View style={styles.quizContainer}>
+        <TouchableOpacity
+          key={Math.random() * 10000 * Math.random()}
+          onPress={() => {
+            QuizContext.setCurrentQuiz(quiz);
+            push(componentId, QUIZ_SCREEN);
+          }}>
+          <Text style={styles.quizTitle}>Quiz #{index + 1}</Text>
+          <Text style={styles.quizDescription}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+            volutpat lectus et justo lacinia pharetra. Aliquam rutrum maximus
+            gravida. Aliquam et sapien neque.
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  const shouldShowRegulationsScreen = async () => {
+    try {
+      const showRegulationsScreen = await AsyncStorage.getItem(
+        SHOW_REGULATIONS_SCREEN_STORAGE,
+      );
+      return showRegulationsScreen === null;
+    } catch (e) {
+      return true;
+    }
   };
 
   return (
@@ -220,7 +221,7 @@ const HomeScreen = ({componentId}) => {
       <View style={styles.container}>
         <FlatList
           data={quizzesData}
-          renderItem={({item, index}) => createItem(item, index, componentId)}
+          renderItem={({item, index}) => createItem(item, index)}
           keyExtractor={(item, index) => index.toString()}
           refreshControl={
             <RefreshControl
