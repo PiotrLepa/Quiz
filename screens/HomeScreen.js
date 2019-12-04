@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, Text, TouchableOpacity, FlatList} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  RefreshControl,
+} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import SplashScreen from 'react-native-splash-screen';
 import {Navigation} from 'react-native-navigation';
@@ -159,18 +166,18 @@ const createItem = (quiz, index) => {
   return (
     <View style={styles.quizContainer}>
       <TouchableOpacity
-      key={Math.random() * 10000 * Math.random()}
-      onPress={() => {
-        QuizContext.setCurrentQuiz(quiz);
-        navigate(QUIZ_SCREEN, {questionIndex: index});
-      }}>
-      <Text style={styles.quizTitle}>Quiz #{index + 1}</Text>
-      <Text style={styles.quizDescription}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat
-        lectus et justo lacinia pharetra. Aliquam rutrum maximus gravida.
-        Aliquam et sapien neque.
-      </Text>
-    </TouchableOpacity>
+        key={Math.random() * 10000 * Math.random()}
+        onPress={() => {
+          QuizContext.setCurrentQuiz(quiz);
+          navigate(QUIZ_SCREEN, {questionIndex: index});
+        }}>
+        <Text style={styles.quizTitle}>Quiz #{index + 1}</Text>
+        <Text style={styles.quizDescription}>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat
+          lectus et justo lacinia pharetra. Aliquam rutrum maximus gravida.
+          Aliquam et sapien neque.
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -201,6 +208,13 @@ const HomeScreen = () => {
 
   const [quizzesData, setQuizzesData] = useState(getQuizzes());
 
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const refreshQuizzes = () => {
+    setIsRefreshing(true);
+    setTimeout(() => setIsRefreshing(false), 1500);
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -208,6 +222,14 @@ const HomeScreen = () => {
           data={quizzesData}
           renderItem={({item, index}) => createItem(item, index)}
           keyExtractor={(item, index) => index.toString()}
+          refreshControl={
+            <RefreshControl
+              onRefresh={refreshQuizzes}
+              refreshing={isRefreshing}
+              tintColor='dodgerblue'
+              colors={['dodgerblue']}
+            />
+          }
         />
       </View>
     </>

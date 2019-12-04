@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, FlatList} from 'react-native';
+import {StyleSheet, View, Text, FlatList, RefreshControl} from 'react-native';
 import QuizContext from '../QuizContext';
 
 const getResults = () => {
@@ -37,7 +37,9 @@ const getResults = () => {
 
 const createItem = item => {
   return (
-    <View style={styles.resultContainer} key={Math.random() * 10000 * Math.random()}>
+    <View
+      style={styles.resultContainer}
+      key={Math.random() * 10000 * Math.random()}>
       <Text style={styles.resultText}>Nick: {item.nick}</Text>
       <Text style={styles.resultText}>Score: {item.score}</Text>
       <Text style={styles.resultText}>Total: {item.total}</Text>
@@ -50,6 +52,13 @@ const createItem = item => {
 const ResultsScreen = () => {
   const [resultsData, setResultsData] = useState(getResults());
 
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const refreshResults = () => {
+    setIsRefreshing(true);
+    setTimeout(() => setIsRefreshing(false), 1500);
+  };
+
   const renderCurrentQuizResult = () => {
     const result = QuizContext.getPointsResult();
     QuizContext.clear();
@@ -58,7 +67,7 @@ const ResultsScreen = () => {
     if (result === null) return <View></View>;
     return (
       <Text style={styles.userResult}>
-        You answered correct to {result.score} of {result.maxPoints}
+        You answered {result.score} of {result.maxPoints} correctly
       </Text>
     );
   };
@@ -71,6 +80,14 @@ const ResultsScreen = () => {
           data={resultsData}
           renderItem={({item}) => createItem(item)}
           keyExtractor={(item, index) => index.toString()}
+          refreshControl={
+            <RefreshControl
+              onRefresh={refreshResults}
+              refreshing={isRefreshing}
+              tintColor='dodgerblue'
+              colors={['dodgerblue']}
+            />
+          }
         />
       </View>
     </>
