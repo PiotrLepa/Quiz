@@ -10,7 +10,7 @@ import {
 import AsyncStorage from '@react-native-community/async-storage';
 import SplashScreen from 'react-native-splash-screen';
 import {Navigation} from 'react-native-navigation';
-import {push, showDrawer} from '../navigation/NavigationUtils';
+import {push, showDrawer, showModal} from '../navigation/NavigationUtils';
 import {
   REGULATIONS_SCREEN,
   QUIZ_SCREEN,
@@ -163,7 +163,6 @@ const getQuizzes = () => {
 };
 
 const HomeScreen = ({componentId}) => {
-
   const [quizzesData, setQuizzesData] = useState(getQuizzes());
 
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -175,7 +174,7 @@ const HomeScreen = ({componentId}) => {
     );
     shouldShowRegulationsScreen().then(shouldShow => {
       if (shouldShow) {
-        push(componentId, REGULATIONS_SCREEN); // TODO to modal screen
+        showModal(REGULATIONS_SCREEN);
       }
     });
   });

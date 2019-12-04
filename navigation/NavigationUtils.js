@@ -58,3 +58,15 @@ export const navigateAndClearStack = (
     },
   });
 };
+
+export const showModal = (targetComponentName, props) => {
+  Navigation.showModal({
+    component: {
+      name: targetComponentName,
+      passProps: props,
+    },
+  });
+};
+
+export const dismissModal = componentToDismiss =>
+  Navigation.dismissModal(componentToDismiss);
