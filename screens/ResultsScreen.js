@@ -39,22 +39,9 @@ const ResultsScreen = () => {
     );
   };
 
-  const renderCurrentQuizResult = () => {
-    const result = QuizContext.getPointsResult();
-    QuizContext.clear();
-
-    if (result === null) return <View />;
-    return (
-      <Text style={styles.userResult}>
-        You answered {result.score} of {result.maxPoints} correctly
-      </Text>
-    );
-  };
-
   return (
     <>
       <View style={styles.container}>
-        {renderCurrentQuizResult()}
         <FlatList
           data={resultsData}
           renderItem={({item}) => createItem(item)}

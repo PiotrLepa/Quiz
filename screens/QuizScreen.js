@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, TouchableOpacity, FlatList} from 'react-native';
 import {navigateAndClearStack} from '../navigation/NavigationUtils';
-import {HOME_SCREEN, RESULTS_SCREEN, QUIZ_SCREEN} from '../Constants';
+import {HOME_SCREEN, USER_RESULT_SCREEN} from '../Constants';
 
 import AppButton from '../components/AppButton';
 import TimerIndicator from '../components/TimerIndicator';
@@ -20,9 +20,7 @@ const QuizScreen = ({componentId}) => {
       <TouchableOpacity
         style={styles.item}
         key={Math.random() * 10000 * Math.random()}
-        onPress={() =>
-          handleUserAnswer(answer.isCorrect)
-        }>
+        onPress={() => handleUserAnswer(answer.isCorrect)}>
         <Text style={styles.answerText}>{answer.content}</Text>
       </TouchableOpacity>
     );
@@ -31,7 +29,7 @@ const QuizScreen = ({componentId}) => {
   const handleUserAnswer = isCorrect => {
     QuizContext.saveUserAnswer(questionIndex, isCorrect);
     if (QuizContext.isLastQuestion(questionIndex)) {
-      navigateAndClearStack(componentId, RESULTS_SCREEN);
+      navigateAndClearStack(componentId, USER_RESULT_SCREEN);
     } else {
       setRefreshTimer(true);
       setQuestionIndex(questionIndex + 1);
