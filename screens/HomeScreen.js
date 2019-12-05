@@ -10,7 +10,7 @@ import {
 import AsyncStorage from '@react-native-community/async-storage';
 import SplashScreen from 'react-native-splash-screen';
 import {Navigation} from 'react-native-navigation';
-import {push, showDrawer, showModal} from '../navigation/NavigationUtils';
+import {push, showDrawer, hideDrawerMenuIcon, navigateAndClearStack} from '../navigation/NavigationUtils';
 import {
   REGULATIONS_SCREEN,
   QUIZ_SCREEN,
@@ -174,7 +174,8 @@ const HomeScreen = ({componentId}) => {
     );
     shouldShowRegulationsScreen().then(shouldShow => {
       if (shouldShow) {
-        showModal(REGULATIONS_SCREEN);
+        hideDrawerMenuIcon(componentId);
+        navigateAndClearStack(componentId, REGULATIONS_SCREEN);
       }
     });
   });

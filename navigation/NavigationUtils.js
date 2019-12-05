@@ -59,14 +59,25 @@ export const navigateAndClearStack = (
   });
 };
 
-export const showModal = (targetComponentName, props) => {
-  Navigation.showModal({
-    component: {
-      name: targetComponentName,
-      passProps: props,
+export const hideDrawerMenuIcon = componentId => {
+  Navigation.mergeOptions(componentId, {
+    topBar: {
+      visible: false,
+      leftButtons: null,
     },
   });
 };
 
-export const dismissModal = componentToDismiss =>
-  Navigation.dismissModal(componentToDismiss);
+export const showDrawerMenuIcon = componentId => {
+  Navigation.mergeOptions(componentId, {
+    topBar: {
+      visible: true,
+      leftButtons: [
+        {
+          id: 'toggleDrawer',
+          icon: require('../assets/ic_menu.png'),
+        },
+      ],
+    },
+  });
+};
