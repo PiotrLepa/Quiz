@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, Text, FlatList, RefreshControl} from 'react-native';
 import QuizContext from '../QuizContext';
+import {BASE_URL} from '../Constants';
 
 const getResults = () => {
   return [
@@ -35,63 +36,88 @@ const getResults = () => {
   ];
 };
 
-const createItem = item => {
-  return (
-    <View
-      style={styles.resultContainer}
-      key={Math.random() * 10000 * Math.random()}>
-      <Text style={styles.resultText}>Nick: {item.nick}</Text>
-      <Text style={styles.resultText}>Score: {item.score}</Text>
-      <Text style={styles.resultText}>Total: {item.total}</Text>
-      <Text style={styles.resultText}>Type: {item.type}</Text>
-      <Text style={styles.resultText}>Date: {item.date}</Text>
-    </View>
-  );
-};
+class ResultsScreen extends React.Component {
+  componentDidMount() {
+    console.log(`url: ${BASE_URL + 'results'}`);
+    fetch(BASE_URL + 'results')
+      .then(response => console.log('response: ', response))
+      .catch(reason => console.log(reason));
+  }
 
-const ResultsScreen = () => {
-  const [resultsData, setResultsData] = useState(getResults());
+  // useEffect(async () => {
+  //   // fetchResults();
+  //   const response = await fetch(BASE_URL + 'results');
+  //   console.log(response)
+  //   setResultsData(response.json);
+  // });
 
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  // const [resultsData, setResultsData] = useState();
 
-  const refreshResults = () => {
-    setIsRefreshing(true);
-    setTimeout(() => setIsRefreshing(false), 1500);
-  };
+  // const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const renderCurrentQuizResult = () => {
-    const result = QuizContext.getPointsResult();
-    QuizContext.clear();
+  // const refreshResults = () => {
+  //   setIsRefreshing(true);
+  //   setTimeout(() => setIsRefreshing(false), 1500);
+  // };
 
-    if (result === null) return <View />;
-    return (
-      <Text style={styles.userResult}>
-        You answered {result.score} of {result.maxPoints} correctly
-      </Text>
-    );
-  };
+  // const fetchResults = () => {
+  //   console.log(`url: ${BASE_URL + 'results'}`)
+  //   fetch(BASE_URL + 'results')
+  //     .then(response => console.log('response: ', response.json))
+  //     .catch(reason => console.log(reason.stack));
+  // };
 
-  return (
-    <>
-      <View style={styles.container}>
-        {renderCurrentQuizResult()}
-        <FlatList
-          data={resultsData}
-          renderItem={({item}) => createItem(item)}
-          keyExtractor={(item, index) => index.toString()}
-          refreshControl={
-            <RefreshControl
-              onRefresh={refreshResults}
-              refreshing={isRefreshing}
-              tintColor="dodgerblue"
-              colors={['dodgerblue']}
-            />
-          }
-        />
-      </View>
-    </>
-  );
-};
+  // const createItem = item => {
+  //   return (
+  //     <View
+  //       style={styles.resultContainer}
+  //       key={Math.random() * 10000 * Math.random()}>
+  //       <Text style={styles.resultText}>Nick: {item.nick}</Text>
+  //       <Text style={styles.resultText}>Score: {item.score}</Text>
+  //       <Text style={styles.resultText}>Total: {item.total}</Text>
+  //       <Text style={styles.resultText}>Type: {item.type}</Text>
+  //       <Text style={styles.resultText}>Date: {item.date}</Text>
+  //     </View>
+  //   );
+  // };
+
+  // const renderCurrentQuizResult = () => {
+  //   const result = QuizContext.getPointsResult();
+  //   QuizContext.clear();
+
+  //   if (result === null) return <View />;
+  //   return (
+  //     <Text style={styles.userResult}>
+  //       You answered {result.score} of {result.maxPoints} correctly
+  //     </Text>
+  //   );
+  // };
+
+  // return (
+  //   <>
+  //     <View style={styles.container}>
+  //       {renderCurrentQuizResult()}
+  //       <FlatList
+  //         data={resultsData}
+  //         renderItem={({item}) => createItem(item)}
+  //         keyExtractor={(item, index) => index.toString()}
+  //         refreshControl={
+  //           <RefreshControl
+  //             onRefresh={refreshResults}
+  //             refreshing={isRefreshing}
+  //             tintColor="dodgerblue"
+  //             colors={['dodgerblue']}
+  //           />
+  //         }
+  //       />
+  //     </View>
+  //   </>
+  // );
+
+  render() {
+    return <Text>fsdfsd</Text>;
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
