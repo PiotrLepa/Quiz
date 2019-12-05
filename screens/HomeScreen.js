@@ -257,12 +257,14 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: 'white',
     padding: 12,
+    fontFamily: 'Lato-Bold',
   },
   quizDescription: {
     textAlign: 'center',
     fontSize: 15,
     color: 'white',
     padding: 8,
+    fontFamily: 'Lato-Regular',
   },
 });
 

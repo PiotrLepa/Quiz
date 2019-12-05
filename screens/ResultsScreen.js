@@ -63,8 +63,7 @@ const ResultsScreen = () => {
     const result = QuizContext.getPointsResult();
     QuizContext.clear();
 
-    console.log(result);
-    if (result === null) return <View></View>;
+    if (result === null) return <View />;
     return (
       <Text style={styles.userResult}>
         You answered {result.score} of {result.maxPoints} correctly
@@ -84,7 +83,7 @@ const ResultsScreen = () => {
             <RefreshControl
               onRefresh={refreshResults}
               refreshing={isRefreshing}
-              tintColor='dodgerblue'
+              tintColor="dodgerblue"
               colors={['dodgerblue']}
             />
           }
@@ -110,11 +109,13 @@ const styles = StyleSheet.create({
   resultText: {
     color: 'white',
     fontSize: 15,
+    fontFamily: 'Lato-Regular',
   },
   userResult: {
     fontSize: 35,
     textAlign: 'center',
     padding: 20,
+    fontFamily: 'Lato-Bold',
   },
 });
 

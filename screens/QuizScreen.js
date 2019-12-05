@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 32,
     marginVertical: 24,
+    fontFamily: 'Lato-Bold',
   },
   answerList: {
     flex: 1,
@@ -85,6 +86,7 @@ const styles = StyleSheet.create({
     borderColor: 'dodgerblue',
     borderWidth: 2,
     borderRadius: 16,
+    fontFamily: 'Lato-Regular',
   },
 });
 

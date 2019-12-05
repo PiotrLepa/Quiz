@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
   contentText: {
     fontSize: 24,
     textAlign: 'center',
+    fontFamily: 'Lato-Regular',
   },
   buttonsContainer: {
     flexDirection: 'row',

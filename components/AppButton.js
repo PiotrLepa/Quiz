@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     color: 'white',
     textAlign: 'center',
+    fontFamily: 'Lato-Bold',
   },
 });
 
