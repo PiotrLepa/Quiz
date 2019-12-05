@@ -1,19 +1,36 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, Text, TouchableOpacity, FlatList} from 'react-native';
 import {navigateAndClearStack} from '../navigation/NavigationUtils';
-import {HOME_SCREEN, USER_RESULT_SCREEN} from '../Constants';
+import {HOME_SCREEN, USER_RESULT_SCREEN, BASE_URL} from '../Constants';
 
 import AppButton from '../components/AppButton';
 import TimerIndicator from '../components/TimerIndicator';
 
 import QuizContext from '../QuizContext';
 
-const QuizScreen = ({componentId}) => {
+const QuizScreen = ({componentId, quizId}) => {
+  useEffect(() => {
+    fetchQuizDetails();
+  }, [0]);
+
   const [questionIndex, setQuestionIndex] = useState(0);
 
   const [refreshTimer, setRefreshTimer] = useState(false);
 
-  const question = QuizContext.getQuestion(questionIndex);
+  const [isFetching, setIsFetching] = useState(true);
+
+  const [task, setTask] = useState();
+
+  const fetchQuizDetails = () => {
+    fetch(BASE_URL + 'test/' + quizId)
+      .then(response => response.json())
+      .then(data => {
+        QuizContext.setQuiz(data);
+        setTask(QuizContext.getTask(questionIndex));
+        setIsFetching(false);
+      })
+      .catch(reason => console.log(reason));
+  };
 
   const createItem = answer => {
     return (
@@ -31,36 +48,49 @@ const QuizScreen = ({componentId}) => {
     if (QuizContext.isLastQuestion(questionIndex)) {
       navigateAndClearStack(componentId, USER_RESULT_SCREEN);
     } else {
-      setRefreshTimer(true);
-      setQuestionIndex(questionIndex + 1);
+      renderNextTask();
     }
   };
 
-  return (
-    <>
-      <View style={styles.container}>
-        <TimerIndicator
-          styles={{flex: 1}}
-          maxValue={question.duration}
-          onTimeOver={() => handleUserAnswer(false)}
-          shouldRefresh={refreshTimer}
-          onRefreshed={() => setRefreshTimer(false)}
-        />
-        <Text style={styles.questionText}>{question.question}</Text>
-        <FlatList
-          style={styles.answerList}
-          data={question.answers}
-          renderItem={({item}) => createItem(item)}
-          keyExtractor={(item, index) => index.toString()}
-        />
-        <AppButton
-          style={styles.button}
-          onPress={() => navigateAndClearStack(componentId, HOME_SCREEN)}
-          text="Cancel"
-        />
-      </View>
-    </>
-  );
+  const renderNextTask = () => {
+    setRefreshTimer(true);
+    setTask(QuizContext.getTask(questionIndex + 1));
+    setQuestionIndex(questionIndex + 1);
+  }
+
+  if (isFetching) {
+    return (
+      <>
+        <Text>Fetching</Text>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <View style={styles.container}>
+          <TimerIndicator
+            styles={{flex: 1}}
+            maxValue={task.duration}
+            onTimeOver={() => handleUserAnswer(false)}
+            shouldRefresh={refreshTimer}
+            onRefreshed={() => setRefreshTimer(false)}
+          />
+          <Text style={styles.questionText}>{task.question}</Text>
+          <FlatList
+            style={styles.answerList}
+            data={task.answers}
+            renderItem={({item}) => createItem(item)}
+            keyExtractor={(item, index) => index.toString()}
+          />
+          <AppButton
+            style={styles.button}
+            onPress={() => navigateAndClearStack(componentId, HOME_SCREEN)}
+            text="Cancel"
+          />
+        </View>
+      </>
+    );
+  }
 };
 
 const styles = StyleSheet.create({

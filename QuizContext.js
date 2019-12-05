@@ -1,11 +1,9 @@
 export default class QuizContext {
-  static completedQuestions = [];
+  static completedTasks = [];
 
   static getPointsResult() {
-    if (this.completedQuestions.length == 0) return null;
-
     const score =  this._calculateUserResult();
-    const maxPoints = this.completedQuestions.length;
+    const maxPoints = this.completedTasks.length;
     return {
       score,
       maxPoints
@@ -13,7 +11,7 @@ export default class QuizContext {
   }
 
   static _calculateUserResult() {
-    return this.completedQuestions.reduce((acc, question) => {
+    return this.completedTasks.reduce((acc, question) => {
       if (question.userAnsweredCorrect) {
         return acc + 1;
       }
@@ -22,32 +20,32 @@ export default class QuizContext {
   }
 
   static getResult() {
-    return this.completedQuestions;
+    return this.completedTasks;
   }
 
   static saveUserAnswer(index, correct) {
-    const question = this.getQuestion(index);
-    this.completedQuestions.push({
-      ...question,
+    const task = this.getTask(index);
+    this.completedTasks.push({
+      ...task,
       userAnsweredCorrect: correct,
     });
   }
 
-  static setCurrentQuiz(quiz) {
+  static setQuiz(quiz) {
     this.clear();
     this.quiz = quiz;
   }
 
-  static getQuestion(index) {
-    return this.quiz[index];
+  static getTask(index) {
+    return this.quiz.tasks[index];
   }
 
   static isLastQuestion(index) {
-    return this.quiz.length === index + 1;
+    return this.quiz.tasks.length === index + 1;
   }
 
   static clear() {
     this.quiz = undefined;
-    this.completedQuestions = [];
+    this.completedTasks = [];
   }
 }

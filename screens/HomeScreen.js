@@ -20,10 +20,8 @@ import {
   REGULATIONS_SCREEN,
   QUIZ_SCREEN,
   SHOW_REGULATIONS_SCREEN_STORAGE,
-  BASE_URL
+  BASE_URL,
 } from '../Constants';
-
-import QuizContext from '../QuizContext';
 
 const HomeScreen = ({componentId}) => {
   const [quizzesData, setQuizzesData] = useState();
@@ -64,21 +62,14 @@ const HomeScreen = ({componentId}) => {
       <View style={styles.quizContainer}>
         <TouchableOpacity
           key={id}
-          onPress={() => {
-            QuizContext.setCurrentQuiz(quiz);
-            push(componentId, QUIZ_SCREEN);
-          }}>
+          onPress={() => push(componentId, QUIZ_SCREEN, {quizId: id})}>
           <Text style={styles.quizTitle}>
             Quiz #{index + 1} {name}
           </Text>
           <Text style={styles.quizDescription}>{description}</Text>
-          <Text style={styles.quizInfo}>
-            Tags: {tags.join(',')}
-          </Text>
+          <Text style={styles.quizInfo}>Tags: {tags.join(',')}</Text>
           <Text style={styles.quizInfo}>Level: {level}</Text>
-          <Text style={styles.quizInfo}>
-            Number Of Tasks: {numberOfTasks}
-          </Text>
+          <Text style={styles.quizInfo}>Number Of Tasks: {numberOfTasks}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -101,7 +92,7 @@ const HomeScreen = ({componentId}) => {
         <FlatList
           data={quizzesData}
           renderItem={({item, index}) => createItem(item, index)}
-          keyExtractor={(item) => item.id}
+          keyExtractor={item => item.id}
           refreshControl={
             <RefreshControl
               onRefresh={refreshQuizzes}
