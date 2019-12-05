@@ -13,20 +13,20 @@ const QuizScreen = ({componentId, quizId}) => {
     fetchQuizDetails();
   }, [0]);
 
-  const [questionIndex, setQuestionIndex] = useState(0);
+  const [taskIndex, setTaskIndex] = useState(0);
+
+  const [task, setTask] = useState();
 
   const [refreshTimer, setRefreshTimer] = useState(false);
 
   const [isFetching, setIsFetching] = useState(true);
-
-  const [task, setTask] = useState();
 
   const fetchQuizDetails = () => {
     fetch(BASE_URL + 'test/' + quizId)
       .then(response => response.json())
       .then(data => {
         QuizContext.setQuiz(data);
-        setTask(QuizContext.getTask(questionIndex));
+        setTask(QuizContext.getTask(taskIndex));
         setIsFetching(false);
       })
       .catch(reason => console.log(reason));
@@ -44,8 +44,8 @@ const QuizScreen = ({componentId, quizId}) => {
   };
 
   const handleUserAnswer = isCorrect => {
-    QuizContext.saveUserAnswer(questionIndex, isCorrect);
-    if (QuizContext.isLastQuestion(questionIndex)) {
+    QuizContext.saveUserAnswer(taskIndex, isCorrect);
+    if (QuizContext.isLastQuestion(taskIndex)) {
       navigateAndClearStack(componentId, USER_RESULT_SCREEN);
     } else {
       renderNextTask();
@@ -54,8 +54,9 @@ const QuizScreen = ({componentId, quizId}) => {
 
   const renderNextTask = () => {
     setRefreshTimer(true);
-    setTask(QuizContext.getTask(questionIndex + 1));
-    setQuestionIndex(questionIndex + 1);
+    const nextIndex = taskIndex + 1;
+    setTask(QuizContext.getTask(nextIndex));
+    setTaskIndex(nextIndex);
   }
 
   if (isFetching) {
@@ -75,7 +76,7 @@ const QuizScreen = ({componentId, quizId}) => {
             shouldRefresh={refreshTimer}
             onRefreshed={() => setRefreshTimer(false)}
           />
-          <Text style={styles.questionText}>{task.question}</Text>
+  <Text style={styles.questionText}>{taskIndex + 1}. {task.question}</Text>
           <FlatList
             style={styles.answerList}
             data={task.answers}
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
   },
   questionText: {
     textAlign: 'center',
-    fontSize: 32,
+    fontSize: 25,
     marginVertical: 24,
     fontFamily: 'Lato-Bold',
   },
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
   },
   answerText: {
     textAlign: 'center',
-    fontSize: 25,
+    fontSize: 18,
     marginVertical: 12,
     padding: 12,
     borderColor: 'dodgerblue',

@@ -11,8 +11,8 @@ export default class QuizContext {
   }
 
   static _calculateUserResult() {
-    return this.completedTasks.reduce((acc, question) => {
-      if (question.userAnsweredCorrect) {
+    return this.completedTasks.reduce((acc, task) => {
+      if (task.userAnsweredCorrect) {
         return acc + 1;
       }
       return acc;
