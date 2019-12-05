@@ -8,4 +8,4 @@ export const RESULTS_SCREEN = 'ResultsScreen';
 export const SHOW_REGULATIONS_SCREEN_STORAGE =
   'SHOW_REGULATIONS_SCREEN_STORAGE';
 
-export const BASE_URL = 'https://tgryl.pl/quiz/';
+export const BASE_URL = 'https://pwsz-quiz-api.herokuapp.com/api/';
