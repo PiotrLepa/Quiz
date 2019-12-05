@@ -26,14 +26,19 @@ const useInterval = (callback, delay) => {
   }, [delay]);
 };
 
-const TimerIndicator = ({maxValue, onTimeOver}) => {
+const TimerIndicator = ({maxValue, onTimeOver, shouldRefresh, onRefreshed}) => {
   const [timer, setTimer] = useState(maxValue);
 
   useInterval(
     () => {
-      decrementTimer();
-      if (timer === 0) {
-        onTimeOver();
+      if (shouldRefresh) {
+        setTimer(maxValue);
+        onRefreshed();
+      } else {
+        decrementTimer();
+        if (timer === 0) {
+          onTimeOver();
+        }
       }
     },
     timer >= 0 ? 1000 : null,

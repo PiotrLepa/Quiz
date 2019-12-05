@@ -11,6 +11,8 @@ import QuizContext from '../QuizContext';
 const QuizScreen = ({componentId}) => {
   const [questionIndex, setQuestionIndex] = useState(0);
 
+  const [refreshTimer, setRefreshTimer] = useState(false);
+
   const question = QuizContext.getQuestion(questionIndex);
 
   const createItem = answer => {
@@ -19,7 +21,7 @@ const QuizScreen = ({componentId}) => {
         style={styles.item}
         key={Math.random() * 10000 * Math.random()}
         onPress={() =>
-          handleUserAnswer(questionIndex, answer.isCorrect, componentId)
+          handleUserAnswer(answer.isCorrect)
         }>
         <Text style={styles.answerText}>{answer.content}</Text>
       </TouchableOpacity>
@@ -31,6 +33,7 @@ const QuizScreen = ({componentId}) => {
     if (QuizContext.isLastQuestion(questionIndex)) {
       navigateAndClearStack(componentId, RESULTS_SCREEN);
     } else {
+      setRefreshTimer(true);
       setQuestionIndex(questionIndex + 1);
     }
   };
@@ -42,6 +45,8 @@ const QuizScreen = ({componentId}) => {
           styles={{flex: 1}}
           maxValue={question.duration}
           onTimeOver={() => handleUserAnswer(false)}
+          shouldRefresh={refreshTimer}
+          onRefreshed={() => setRefreshTimer(false)}
         />
         <Text style={styles.questionText}>{question.question}</Text>
         <FlatList
