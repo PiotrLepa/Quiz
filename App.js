@@ -1,52 +1,16 @@
-import React, {Component} from 'react';
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import React from 'react';
+import {StyleSheet, View, Text} from 'react-native';
+const App  = () => {
 
-import {Navigation} from 'react-native-navigation';
-
-class App extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>Main Screen</Text>
-        <TouchableOpacity
-          style={styles.buttonContainer}
-          onPress={() => this.navigateToScreen('TestScreen')}>
-          <Text style={styles.buttonText}>TestScreen</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.buttonContainer}
-          onPress={() => this.navigateToScreen('ResultScreen')}>
-          <Text style={styles.buttonText}>ResultScreen</Text>
-        </TouchableOpacity>
+  return (
+    <>
+      <View>
+        <Text>App</Text>
       </View>
-    );
-  }
-
-  navigateToScreen = screenName => {
-    Navigation.push(this.props.componentId, {
-      component: {
-        name: screenName,
-      },
-    });
-  };
+    </>
+  );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonText: {
-    fontSize: 32,
-    color: 'white'
-  },
-  buttonContainer: {
-    backgroundColor: 'dodgerblue',
-    margin: 12,
-    padding: 16,
-    borderRadius: 24,
-  },
-});
+const styles = StyleSheet.create({});
 
 export default App;

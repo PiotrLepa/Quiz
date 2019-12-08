@@ -1,25 +1,14 @@
-/**
- * @format
- */
-
 import {Navigation} from 'react-native-navigation';
-import App from './App';
-import Drawer from './components/Drawer';
-import TestScreen from './screens/TestScreen';
-import ResultScreen from './screens/ResultScreen';
 
-Navigation.registerComponent('App', () => App);
-Navigation.registerComponent('Drawer', () => Drawer);
-Navigation.registerComponent('TestScreen', () => TestScreen);
-Navigation.registerComponent('ResultScreen', () => ResultScreen);
+import {setNavigationRoot} from './navigation/NavigationUtils';
+import {HOME_SCREEN, DRAWER, MAIN_STACK_ID} from './Constants';
 
-// const {width} = Dimensions.get('window');
 Navigation.events().registerAppLaunchedListener(() => {
   Navigation.setDefaultOptions({
     topBar: {
       elevation: 0,
-      visible: false,
-      drawBehind: false,
+      visible: true,
+      drawBehind: true,
       animate: false,
       title: {
         color: 'white',
@@ -28,32 +17,31 @@ Navigation.events().registerAppLaunchedListener(() => {
       background: {
         color: 'transparent',
       },
+      leftButtons: [
+        {
+          id: 'toggleDrawer',
+          icon: require('./assets/ic_menu.png'),
+        },
+      ],
     },
   });
-
+  
   Navigation.setRoot({
     root: {
       sideMenu: {
         left: {
           component: {
             id: 'drawerId',
-            name: 'Drawer',
+            name: DRAWER
           },
         },
         center: {
           stack: {
-            id: 'MainStack',
+            id: MAIN_STACK_ID,
             children: [
               {
                 component: {
-                  name: 'App',
-                  options: {
-                    topBar: {
-                      title: {
-                        text: 'Welcome',
-                      },
-                    },
-                  },
+                  name: HOME_SCREEN
                 },
               },
             ],
@@ -63,27 +51,3 @@ Navigation.events().registerAppLaunchedListener(() => {
     },
   });
 });
-
-// Navigation.events().registerAppLaunchedListener(() => {
-//   Navigation.setRoot({
-//     root: {
-//       stack: {
-//         id: 'AppStack',
-//         children: [
-//           {
-//             component: {
-//               name: 'App',
-//               options: {
-//                 topBar: {
-//                   title: {
-//                     text: 'Welcome',
-//                   },
-//                 },
-//               },
-//             },
-//           },
-//         ],
-//       },
-//     },
-//   });
-// });
