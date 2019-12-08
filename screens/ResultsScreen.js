@@ -1,56 +1,15 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, Text, FlatList, RefreshControl} from 'react-native';
 import QuizContext from '../QuizContext';
-
-const getResults = () => {
-  return [
-    {
-      nick: 'Tomek',
-      score: 5,
-      total: 7,
-      type: 'matematyka',
-      date: '2019-11-16',
-    },
-    {
-      nick: 'Adam',
-      score: 7,
-      total: 9,
-      type: 'chemia',
-      date: '2019-11-21',
-    },
-    {
-      nick: 'Edward',
-      score: 22,
-      total: 33,
-      type: 'biologia',
-      date: '2019-10-01',
-    },
-    {
-      nick: 'Marek',
-      score: 18,
-      total: 20,
-      type: 'historia',
-      date: '2019-11-01',
-    },
-  ];
-};
-
-const createItem = item => {
-  return (
-    <View
-      style={styles.resultContainer}
-      key={Math.random() * 10000 * Math.random()}>
-      <Text style={styles.resultText}>Nick: {item.nick}</Text>
-      <Text style={styles.resultText}>Score: {item.score}</Text>
-      <Text style={styles.resultText}>Total: {item.total}</Text>
-      <Text style={styles.resultText}>Type: {item.type}</Text>
-      <Text style={styles.resultText}>Date: {item.date}</Text>
-    </View>
-  );
-};
+import {BASE_URL} from '../Constants';
 
 const ResultsScreen = () => {
-  const [resultsData, setResultsData] = useState(getResults());
+
+  useEffect(() => {
+    fetchResults()
+  },[0]);
+
+  const [resultsData, setResultsData] = useState();
 
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -59,22 +18,30 @@ const ResultsScreen = () => {
     setTimeout(() => setIsRefreshing(false), 1500);
   };
 
-  const renderCurrentQuizResult = () => {
-    const result = QuizContext.getPointsResult();
-    QuizContext.clear();
+  const fetchResults = () => {
+    fetch(BASE_URL + 'results')
+      .then(response => response.json())
+      .then(data => setResultsData(data.reverse()))
+      .catch(reason => console.log(reason));
+  };
 
-    if (result === null) return <View />;
+  const createItem = item => {
     return (
-      <Text style={styles.userResult}>
-        You answered {result.score} of {result.maxPoints} correctly
-      </Text>
+      <View
+        style={styles.resultContainer}
+        key={Math.random() * 10000 * Math.random()}>
+        <Text style={styles.resultText}>Nick: {item.nick}</Text>
+        <Text style={styles.resultText}>Score: {item.score}</Text>
+        <Text style={styles.resultText}>Total: {item.total}</Text>
+        <Text style={styles.resultText}>Type: {item.type}</Text>
+        <Text style={styles.resultText}>Date: {item.date}</Text>
+      </View>
     );
   };
 
   return (
     <>
       <View style={styles.container}>
-        {renderCurrentQuizResult()}
         <FlatList
           data={resultsData}
           renderItem={({item}) => createItem(item)}
@@ -91,7 +58,7 @@ const ResultsScreen = () => {
       </View>
     </>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {

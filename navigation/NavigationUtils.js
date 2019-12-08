@@ -6,7 +6,7 @@ import {
   QUIZ_SCREEN,
   RESULTS_SCREEN,
   REGULATIONS_SCREEN,
-  MAIN_STACK_ID,
+  USER_RESULT_SCREEN,
   DRAWER,
 } from '../Constants';
 
@@ -14,11 +14,13 @@ import HomeScreen from '../screens/HomeScreen';
 import QuizScreen from '../screens/QuizScreen';
 import ResultsScreen from '../screens/ResultsScreen';
 import RegulationsScreen from '../screens/RegulationsScreen';
+import UserResultScreen from '../screens/UserResultScreen';
 
 Navigation.registerComponent(DRAWER, () => Drawer);
 Navigation.registerComponent(HOME_SCREEN, () => HomeScreen);
 Navigation.registerComponent(QUIZ_SCREEN, () => QuizScreen);
 Navigation.registerComponent(RESULTS_SCREEN, () => ResultsScreen);
+Navigation.registerComponent(USER_RESULT_SCREEN, () => UserResultScreen);
 Navigation.registerComponent(REGULATIONS_SCREEN, () => RegulationsScreen);
 
 export const hideDrawer = componentId =>
