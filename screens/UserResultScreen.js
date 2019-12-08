@@ -1,12 +1,33 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, View, Text } from 'react-native';
 import QuizContext from '../QuizContext';
-import {HOME_SCREEN, RESULTS_SCREEN} from '../Constants';
-import {navigateAndClearStack} from '../navigation/NavigationUtils';
+import { HOME_SCREEN, RESULTS_SCREEN, BASE_URL } from '../Constants';
+import { navigateAndClearStack } from '../navigation/NavigationUtils';
 import AppButton from '../components/AppButton';
 
-const UserResultScreen = ({componentId}) => {
+const UserResultScreen = ({ componentId }) => {
+  useEffect(() => {
+    saveUserResult();
+  }, [0]);
+
   const result = QuizContext.getPointsResult();
+
+  const saveUserResult = () => {
+    fetch(BASE_URL + 'result', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        nick: 'Piotrek',
+        score: result.score,
+        total: result.maxPoints,
+        type: QuizContext.getQuizType(),
+        date: new Date().toLocaleDateString()
+      }),
+    });
+  };
 
   return (
     <>

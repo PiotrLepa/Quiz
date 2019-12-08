@@ -10,6 +10,10 @@ export default class QuizContext {
     };
   }
 
+  static getQuizType() {
+    return this.quiz.name;
+  }
+
   static _calculateUserResult() {
     return this.completedTasks.reduce((acc, task) => {
       if (task.userAnsweredCorrect) {

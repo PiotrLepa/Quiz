@@ -21,7 +21,7 @@ const ResultsScreen = () => {
   const fetchResults = () => {
     fetch(BASE_URL + 'results')
       .then(response => response.json())
-      .then(data => setResultsData(data))
+      .then(data => setResultsData(data.reverse()))
       .catch(reason => console.log(reason));
   };
 
