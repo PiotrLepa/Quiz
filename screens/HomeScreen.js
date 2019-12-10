@@ -26,7 +26,7 @@ import {
 const HomeScreen = ({componentId}) => {
   const [quizzesData, setQuizzesData] = useState();
 
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(true);
 
   useEffect(() => {
     fetchQuizzes();
