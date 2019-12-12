@@ -22,6 +22,12 @@ import {
   SHOW_REGULATIONS_SCREEN_STORAGE,
   BASE_URL,
 } from '../Constants';
+import {
+  openDatabase,
+  closeDatabase,
+  insertQuizzesIntoDatabase,
+  loadQuizzesFromDatabase,
+} from '../database/DatabaseUtils';
 
 const HomeScreen = ({componentId}) => {
   const [quizzesData, setQuizzesData] = useState();
@@ -29,25 +35,30 @@ const HomeScreen = ({componentId}) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
-    fetchQuizzes();
-    SplashScreen.hide();
-    Navigation.events().registerNavigationButtonPressedListener(
-      ({componentId}) => showDrawer(componentId),
-    );
-    shouldShowRegulationsScreen().then(shouldShow => {
-      if (shouldShow) {
-        hideDrawerMenuIcon(componentId);
-        navigateAndClearStack(componentId, REGULATIONS_SCREEN);
-      }
+    openDatabase().then(() => {
+      console.log('useEffect opened called');
+      fetchQuizzes();
+      SplashScreen.hide();
+      Navigation.events().registerNavigationButtonPressedListener(
+        ({componentId}) => showDrawer(componentId),
+      );
+      shouldShowRegulationsScreen().then(shouldShow => {
+        if (shouldShow) {
+          hideDrawerMenuIcon(componentId);
+          navigateAndClearStack(componentId, REGULATIONS_SCREEN);
+        }
+      });
     });
-  }, [componentId]);
+  }, []);
 
   const fetchQuizzes = () => {
+    loadQuizzesFromDatabase();
     setIsRefreshing(true);
     fetch(BASE_URL + 'tests')
       .then(response => response.json())
       .then(data => {
         setIsRefreshing(false);
+        insertQuizzesIntoDatabase(data);
         setQuizzesData(data);
       })
       .catch(reason => console.log(reason));
