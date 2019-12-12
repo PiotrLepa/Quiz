@@ -19,6 +19,8 @@ import com.reactnativenavigation.react.ReactGateway;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 
+import org.pgsqlite.SQLitePluginPackage;
+
 public class MainApplication extends NavigationApplication {
 
     @Override
@@ -43,7 +45,8 @@ public class MainApplication extends NavigationApplication {
         return Arrays.<ReactPackage>asList(
                 // eg. new VectorIconsPackage()
                 new AsyncStoragePackage(),
-                new SplashScreenReactPackage()
+                new SplashScreenReactPackage(),
+                new SQLitePluginPackage()
         );
     }
 
