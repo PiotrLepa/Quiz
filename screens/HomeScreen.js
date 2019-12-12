@@ -26,7 +26,7 @@ import {
 const HomeScreen = ({componentId}) => {
   const [quizzesData, setQuizzesData] = useState();
 
-  const [isRefreshing, setIsRefreshing] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
     fetchQuizzes();
@@ -40,18 +40,17 @@ const HomeScreen = ({componentId}) => {
         navigateAndClearStack(componentId, REGULATIONS_SCREEN);
       }
     });
-  }, [0]);
+  }, [componentId]);
 
   const fetchQuizzes = () => {
+    setIsRefreshing(true);
     fetch(BASE_URL + 'tests')
       .then(response => response.json())
-      .then(data => setQuizzesData(data))
+      .then(data => {
+        setIsRefreshing(false);
+        setQuizzesData(data);
+      })
       .catch(reason => console.log(reason));
-  };
-
-  const refreshQuizzes = () => {
-    setIsRefreshing(true);
-    setTimeout(() => setIsRefreshing(false), 1500);
   };
 
   const createItem = (
@@ -95,7 +94,7 @@ const HomeScreen = ({componentId}) => {
           keyExtractor={item => item.id}
           refreshControl={
             <RefreshControl
-              onRefresh={refreshQuizzes}
+              onRefresh={fetchQuizzes}
               refreshing={isRefreshing}
               tintColor="dodgerblue"
               colors={['dodgerblue']}

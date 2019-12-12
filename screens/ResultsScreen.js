@@ -4,24 +4,20 @@ import QuizContext from '../QuizContext';
 import {BASE_URL} from '../Constants';
 
 const ResultsScreen = () => {
-
   useEffect(() => {
-    fetchResults()
-  },[0]);
+    fetchResults();
+  }, []);
 
   const [resultsData, setResultsData] = useState();
 
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const refreshResults = () => {
-    setIsRefreshing(true);
-    setTimeout(() => setIsRefreshing(false), 1500);
-  };
-
   const fetchResults = () => {
     fetch(BASE_URL + 'results')
-      .then(response => response.json())
-      .then(data => setResultsData(data.reverse()))
+      .then(response => {
+        setIsRefreshing(false);
+        setResultsData(response.json().reverse());
+      })
       .catch(reason => console.log(reason));
   };
 
@@ -58,7 +54,7 @@ const ResultsScreen = () => {
       </View>
     </>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
