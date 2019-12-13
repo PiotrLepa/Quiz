@@ -35,19 +35,21 @@ const HomeScreen = ({ componentId }) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
-    openDatabase().then(() => {
-      fetchQuizzes();
-      SplashScreen.hide();
-      Navigation.events().registerNavigationButtonPressedListener(
-        ({ componentId }) => showDrawer(componentId),
-      );
-      shouldShowRegulationsScreen().then(shouldShow => {
-        if (shouldShow) {
-          hideDrawerMenuIcon(componentId);
-          navigateAndClearStack(componentId, REGULATIONS_SCREEN);
-        }
-      });
+    SplashScreen.hide();
+    Navigation.events().registerNavigationButtonPressedListener(
+      ({ componentId }) => showDrawer(componentId),
+    );
+    shouldShowRegulationsScreen().then(shouldShow => {
+      if (shouldShow) {
+        hideDrawerMenuIcon(componentId);
+        navigateAndClearStack(componentId, REGULATIONS_SCREEN);
+      } else {
+        openDatabase().then(() => {
+          fetchQuizzes();
+        });
+      }
     });
+
     return closeDatabase();
   }, [componentId]);
 

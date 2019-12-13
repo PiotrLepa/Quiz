@@ -8,11 +8,23 @@ const INSERT_QUIZ_QUERY =
   QUIZZES_TABLE_NAME +
   ' (id, name, description, tags, level, numberOfTasks) VALUES ';
 const INSERT_QUIZ_QUERY_VALUES = '(?, ?, ?, ?, ?, ?), ';
+const CREATE_QUIZZES_TABLE_QUERY =
+  'CREATE TABLE IF NOT EXISTS ' +
+  QUIZZES_TABLE_NAME +
+  ' ( ' +
+  'id text PRIMARY KEY NOT NULL, ' +
+  'name text, ' +
+  'description text, ' +
+  'tags text, ' +
+  'level text, ' +
+  'numberOfTasks INTEGER' +
+  ');';
 
-let database;
 
 SQLite.enablePromise(true);
 SQLite.DEBUG(true);
+
+let database;
 
 export const loadQuizzesFromDatabase = () => {
   console.log('loadQuizzesFromDatabase called');
@@ -56,8 +68,7 @@ export const insertQuizzesIntoDatabase = quizzes => {
   });
   valuesQuery = valuesQuery.substring(0, valuesQuery.length - 2);
   return new Promise((resolve, reject) => {
-    console.log("Insert query: ", INSERT_QUIZ_QUERY + valuesQuery + ';');
-    
+
     database
       .executeSql(INSERT_QUIZ_QUERY + valuesQuery + ';', parameters)
       .then(([result]) => {
@@ -98,17 +109,5 @@ export const closeDatabase = () => {
 };
 
 const populateDatabase = () => {
-  database
-    .executeSql(
-      'CREATE TABLE IF NOT EXISTS ' +
-      QUIZZES_TABLE_NAME +
-      ' ( ' +
-      'id text PRIMARY KEY NOT NULL, ' +
-      'name text, ' +
-      'description text, ' +
-      'tags text, ' +
-      'level text, ' +
-      'numberOfTasks INTEGER' +
-      ');',
-    );
+  database.executeSql(CREATE_QUIZZES_TABLE_QUERY);
 };
