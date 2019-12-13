@@ -32,7 +32,7 @@ const QuizScreen = ({ componentId, quizId }) => {
         setIsFetching(false);
       })
       .catch(error => {
-        console.error(error);
+        console.log(error);
         ErrorHandler.showError(error);
       });
   };

@@ -1,4 +1,5 @@
 import Snackbar from 'react-native-snackbar';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 class ErrorHandler {
 
@@ -7,6 +8,7 @@ class ErrorHandler {
         Snackbar.show({
             title: message,
             duration: Snackbar.LENGTH_LONG,
+            backgroundColor: 'red'
         });
     };
 

@@ -21,7 +21,7 @@ const ResultsScreen = () => {
         setResultsData(data.reverse());
       })
       .catch(error => {
-        console.error("fetchResults: ", error);
+        console.log("fetchResults: ", error);
         ErrorHandler.showError(error);
       });
   };

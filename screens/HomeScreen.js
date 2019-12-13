@@ -65,7 +65,7 @@ const HomeScreen = ({ componentId }) => {
           .catch(() => setFlatListDataFromDatabase());
       })
       .catch(error => {
-        console.error('fetchQuizzes: ', error);
+        console.log('fetchQuizzes: ', error);
         ErrorHandler.showError(error)
         setFlatListDataFromDatabase();
       });

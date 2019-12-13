@@ -29,7 +29,7 @@ const UserResultScreen = ({ componentId }) => {
         date: new Date().toLocaleDateString()
       }),
     }).catch(error => {
-      console.error('saveUserResult: ', error);
+      console.log('saveUserResult: ', error);
       ErrorHandler.showError(error);
     });
   };

@@ -38,7 +38,7 @@ export const loadQuizzesFromDatabase = () => {
         }
         resolve(mapDataFromDatabase(result.rows));
       }).catch(error => {
-        console.error('loadQuizzesFromDatabase error', error)
+        console.log('loadQuizzesFromDatabase error', error)
         reject(error);
       });
   })
@@ -73,7 +73,7 @@ export const insertQuizzesIntoDatabase = quizzes => {
         console.log('insertQuizzesIntoDatabase rowsAffected: ', result.rowsAffected);
         resolve(result.rowsAffected);
       }).catch(error => {
-        console.error('insertQuizzesIntoDatabase error', error);
+        console.log('insertQuizzesIntoDatabase error', error);
         reject(error);
       });
   });
@@ -89,7 +89,7 @@ export const openDatabase = () => {
       database = db;
       populateDatabase();
       resolve(true);
-    }).catch(error => console.error('openDatabase error', error));
+    }).catch(error => console.log('openDatabase error', error));
   });
 };
 
