@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import SplashScreen from 'react-native-splash-screen';
-import {Navigation} from 'react-native-navigation';
+import { Navigation } from 'react-native-navigation';
 import {
   push,
   showDrawer,
@@ -29,18 +29,17 @@ import {
   loadQuizzesFromDatabase,
 } from '../database/DatabaseUtils';
 
-const HomeScreen = ({componentId}) => {
-  const [quizzesData, setQuizzesData] = useState();
+const HomeScreen = ({ componentId }) => {
+  const [quizzesData, setQuizzesData] = useState([]);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
     openDatabase().then(() => {
-      console.log('useEffect opened called');
       fetchQuizzes();
       SplashScreen.hide();
       Navigation.events().registerNavigationButtonPressedListener(
-        ({componentId}) => showDrawer(componentId),
+        ({ componentId }) => showDrawer(componentId),
       );
       shouldShowRegulationsScreen().then(shouldShow => {
         if (shouldShow) {
@@ -49,30 +48,40 @@ const HomeScreen = ({componentId}) => {
         }
       });
     });
-  }, []);
+    return closeDatabase();
+  }, [componentId]);
 
   const fetchQuizzes = () => {
-    loadQuizzesFromDatabase();
     setIsRefreshing(true);
     fetch(BASE_URL + 'tests')
       .then(response => response.json())
       .then(data => {
-        setIsRefreshing(false);
-        insertQuizzesIntoDatabase(data);
-        setQuizzesData(data);
+        insertQuizzesIntoDatabase(data)
+          .then(() => setFlatListDataFromDatabase())
+          .catch(() => setFlatListDataFromDatabase());
       })
-      .catch(reason => console.log(reason));
+      .catch(reason => {
+        console.log(reason);
+        setFlatListDataFromDatabase();
+      });
+  };
+
+  const setFlatListDataFromDatabase = () => {
+    loadQuizzesFromDatabase().then(quizzes => {
+      setQuizzesData(quizzes)
+      setIsRefreshing(false)
+    });
   };
 
   const createItem = (
-    {id, name, description, tags, level, numberOfTasks},
+    { id, name, description, tags, level, numberOfTasks },
     index,
   ) => {
     return (
       <View style={styles.quizContainer}>
         <TouchableOpacity
           key={id}
-          onPress={() => push(componentId, QUIZ_SCREEN, {quizId: id})}>
+          onPress={() => push(componentId, QUIZ_SCREEN, { quizId: id })}>
           <Text style={styles.quizTitle}>
             Quiz #{index + 1} {name}
           </Text>
@@ -101,7 +110,7 @@ const HomeScreen = ({componentId}) => {
       <View style={styles.container}>
         <FlatList
           data={quizzesData}
-          renderItem={({item, index}) => createItem(item, index)}
+          renderItem={({ item, index }) => createItem(item, index)}
           keyExtractor={item => item.id}
           refreshControl={
             <RefreshControl

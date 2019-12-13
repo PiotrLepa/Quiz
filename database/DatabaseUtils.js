@@ -1,15 +1,13 @@
 import SQLite from 'react-native-sqlite-storage';
 
-const QUIZZES_DATABASE_VERSION = '1.0';
-const QUIZZES_DATABASE_NAME = 'SQLite Quizzes Database';
-const QUIZZES_DATABASE_SIZE = 200000;
 const QUIZZES_DATABASE = 'quizzes.db';
 const QUIZZES_TABLE_NAME = 'Quizzes';
 const SELECT_ALL_QUIZZES_QUERY = 'SELECT * FROM ' + QUIZZES_TABLE_NAME + ';';
-const INSERT_ALL_QUIZZES_QUERY =
-  'INSERT INTO ' +
+const INSERT_QUIZ_QUERY =
+  'INSERT OR REPLACE INTO ' +
   QUIZZES_TABLE_NAME +
-  ' (id, name, description, tags, level, numberOfTasks) VALUES (?, ?, ?, ?, ?, ?);';
+  ' (id, name, description, tags, level, numberOfTasks) VALUES ';
+const INSERT_QUIZ_QUERY_VALUES = '(?, ?, ?, ?, ?, ?), ';
 
 let database;
 
@@ -17,43 +15,69 @@ SQLite.enablePromise(true);
 SQLite.DEBUG(true);
 
 export const loadQuizzesFromDatabase = () => {
-  database
-    .executeSql(SELECT_ALL_QUIZZES_QUERY)
-    .then(result => {
-      console.log('loadQuizzesFromDatabase END: ', result[0].rows);
-    })
-    .catch(error => console.error('loadQuizzesFromDatabase error', error));
+  console.log('loadQuizzesFromDatabase called');
+  return new Promise((resolve, reject) => {
+    database
+      .executeSql(SELECT_ALL_QUIZZES_QUERY)
+      .then(([result]) => {
+        const count = result.rows.length;
+        console.log('loadQuizzesFromDatabase size ', count);
+        if (count === 0) {
+          resolve([]);
+        }
+        resolve(mapDataFromDatabase(result.rows));
+      })
+      .catch(error => {
+        console.error('loadQuizzesFromDatabase error', error)
+        reject(error);
+      });
+  })
 };
+
+const mapDataFromDatabase = (rows) => {
+  const quizzes = [];
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows.item(i);
+    const { id, name, description, tags, level, numberOfTasks } = row;
+    const parsedTags = JSON.parse(tags);
+    quizzes.push({ id, name, description, tags: parsedTags, level, numberOfTasks });
+  }
+  return quizzes;
+}
 
 export const insertQuizzesIntoDatabase = quizzes => {
   console.log('insertQuizzesIntoDatabase called');
+  let valuesQuery = '';
+  let parameters = [];
   quizzes.forEach(quiz => {
-    const {id, name, description, tags, level, numberOfTasks} = quiz;
+    const { id, name, description, tags, level, numberOfTasks } = quiz;
+    parameters.push(id, name, description, JSON.stringify(tags), level, numberOfTasks);
+    valuesQuery += INSERT_QUIZ_QUERY_VALUES
+  });
+  valuesQuery = valuesQuery.substring(0, valuesQuery.length - 2);
+  return new Promise((resolve, reject) => {
+    console.log("Insert query: ", INSERT_QUIZ_QUERY + valuesQuery + ';');
+    
     database
-      .executeSql(INSERT_ALL_QUIZZES_QUERY, [
-        id,
-        name,
-        description,
-        tags,
-        level,
-        numberOfTasks,
-      ])
-      .then(result => {
-        console.log('insertQuizzesIntoDatabase END: ', result);
+      .executeSql(INSERT_QUIZ_QUERY + valuesQuery + ';', parameters)
+      .then(([result]) => {
+        console.log('insertQuizzesIntoDatabase rowsAffected: ', result.rowsAffected);
+        resolve(result.rowsAffected);
       })
-      .catch(() => console.error('insertQuizzesIntoDatabase error'));
+      .catch(error => {
+        console.error('insertQuizzesIntoDatabase error', error);
+        reject(error);
+      });
   });
 };
 
 export const openDatabase = () => {
   console.log('openDatabase called');
   return new Promise((resolve, reject) => {
-    SQLite.openDatabase(
-      QUIZZES_DATABASE,
-      QUIZZES_DATABASE_VERSION,
-      QUIZZES_DATABASE_NAME,
-      QUIZZES_DATABASE_SIZE,
-    )
+    SQLite.openDatabase({
+      name: QUIZZES_DATABASE,
+      location: 'default'
+    })
       .then(db => {
         database = db;
         populateDatabase();
@@ -77,16 +101,14 @@ const populateDatabase = () => {
   database
     .executeSql(
       'CREATE TABLE IF NOT EXISTS ' +
-        QUIZZES_TABLE_NAME +
-        ' ( ' +
-        'id INTEGER PRIMARY KEY NOT NULL, ' +
-        'name VARCHAR(100), ' +
-        'description VARCHAR(500), ' +
-        'tags VARCHAR(500), ' +
-        'level VARCHAR(100), ' +
-        'numberOfTasks INTEGER);',
-    )
-    .catch(error => {
-      console.error('populateDatabase: ', error);
-    });
+      QUIZZES_TABLE_NAME +
+      ' ( ' +
+      'id text PRIMARY KEY NOT NULL, ' +
+      'name text, ' +
+      'description text, ' +
+      'tags text, ' +
+      'level text, ' +
+      'numberOfTasks INTEGER' +
+      ');',
+    );
 };

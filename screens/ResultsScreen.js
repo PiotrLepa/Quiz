@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, Text, FlatList, RefreshControl} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, FlatList, RefreshControl } from 'react-native';
 import QuizContext from '../QuizContext';
-import {BASE_URL} from '../Constants';
+import { BASE_URL } from '../Constants';
 
 const ResultsScreen = () => {
   useEffect(() => {
@@ -14,9 +14,10 @@ const ResultsScreen = () => {
 
   const fetchResults = () => {
     fetch(BASE_URL + 'results')
-      .then(response => {
+      .then(response => response.json())
+      .then(data => {
         setIsRefreshing(false);
-        setResultsData(response.json().reverse());
+        setResultsData(data.reverse());
       })
       .catch(reason => console.log(reason));
   };
@@ -40,11 +41,11 @@ const ResultsScreen = () => {
       <View style={styles.container}>
         <FlatList
           data={resultsData}
-          renderItem={({item}) => createItem(item)}
+          renderItem={({ item }) => createItem(item)}
           keyExtractor={(item, index) => index.toString()}
           refreshControl={
             <RefreshControl
-              onRefresh={refreshResults}
+              onRefresh={fetchResults}
               refreshing={isRefreshing}
               tintColor="dodgerblue"
               colors={['dodgerblue']}
