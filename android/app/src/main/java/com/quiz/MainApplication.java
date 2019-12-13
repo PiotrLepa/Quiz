@@ -21,6 +21,8 @@ import org.devio.rn.splashscreen.SplashScreenReactPackage;
 
 import org.pgsqlite.SQLitePluginPackage;
 
+import com.azendoo.reactnativesnackbar.SnackbarPackage;
+
 public class MainApplication extends NavigationApplication {
 
     @Override
@@ -46,7 +48,8 @@ public class MainApplication extends NavigationApplication {
                 // eg. new VectorIconsPackage()
                 new AsyncStoragePackage(),
                 new SplashScreenReactPackage(),
-                new SQLitePluginPackage()
+                new SQLitePluginPackage(),
+                new SnackbarPackage()
         );
     }
 

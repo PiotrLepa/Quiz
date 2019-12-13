@@ -29,6 +29,8 @@ import {
   loadQuizzesFromDatabase,
 } from '../database/DatabaseUtils';
 
+import ErrorHandler from '../ErrorHandler';
+
 const HomeScreen = ({ componentId }) => {
   const [quizzesData, setQuizzesData] = useState([]);
 
@@ -62,8 +64,9 @@ const HomeScreen = ({ componentId }) => {
           .then(() => setFlatListDataFromDatabase())
           .catch(() => setFlatListDataFromDatabase());
       })
-      .catch(reason => {
-        console.log(reason);
+      .catch(error => {
+        console.error('fetchQuizzes: ', error);
+        ErrorHandler.showError(error)
         setFlatListDataFromDatabase();
       });
   };

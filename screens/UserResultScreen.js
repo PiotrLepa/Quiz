@@ -5,6 +5,8 @@ import { HOME_SCREEN, RESULTS_SCREEN, BASE_URL } from '../Constants';
 import { navigateAndClearStack } from '../navigation/NavigationUtils';
 import AppButton from '../components/AppButton';
 
+import ErrorHandler from '../ErrorHandler';
+
 const UserResultScreen = ({ componentId }) => {
   useEffect(() => {
     saveUserResult();
@@ -26,6 +28,9 @@ const UserResultScreen = ({ componentId }) => {
         type: QuizContext.getQuizType(),
         date: new Date().toLocaleDateString()
       }),
+    }).catch(error => {
+      console.error('saveUserResult: ', error);
+      ErrorHandler.showError(error);
     });
   };
 

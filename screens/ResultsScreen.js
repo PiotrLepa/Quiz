@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, FlatList, RefreshControl } from 'react-native';
-import QuizContext from '../QuizContext';
 import { BASE_URL } from '../Constants';
+
+import ErrorHandler from '../ErrorHandler';
 
 const ResultsScreen = () => {
   useEffect(() => {
@@ -19,7 +20,10 @@ const ResultsScreen = () => {
         setIsRefreshing(false);
         setResultsData(data.reverse());
       })
-      .catch(reason => console.log(reason));
+      .catch(error => {
+        console.error("fetchResults: ", error);
+        ErrorHandler.showError(error);
+      });
   };
 
   const createItem = item => {

@@ -22,7 +22,6 @@ const CREATE_QUIZZES_TABLE_QUERY =
 
 
 SQLite.enablePromise(true);
-SQLite.DEBUG(true);
 
 let database;
 
@@ -38,8 +37,7 @@ export const loadQuizzesFromDatabase = () => {
           resolve([]);
         }
         resolve(mapDataFromDatabase(result.rows));
-      })
-      .catch(error => {
+      }).catch(error => {
         console.error('loadQuizzesFromDatabase error', error)
         reject(error);
       });
@@ -67,15 +65,14 @@ export const insertQuizzesIntoDatabase = quizzes => {
     valuesQuery += INSERT_QUIZ_QUERY_VALUES
   });
   valuesQuery = valuesQuery.substring(0, valuesQuery.length - 2);
-  return new Promise((resolve, reject) => {
 
+  return new Promise((resolve, reject) => {
     database
       .executeSql(INSERT_QUIZ_QUERY + valuesQuery + ';', parameters)
       .then(([result]) => {
         console.log('insertQuizzesIntoDatabase rowsAffected: ', result.rowsAffected);
         resolve(result.rowsAffected);
-      })
-      .catch(error => {
+      }).catch(error => {
         console.error('insertQuizzesIntoDatabase error', error);
         reject(error);
       });
@@ -88,15 +85,11 @@ export const openDatabase = () => {
     SQLite.openDatabase({
       name: QUIZZES_DATABASE,
       location: 'default'
-    })
-      .then(db => {
-        database = db;
-        populateDatabase();
-
-        console.log('openDatabase resolve called');
-        resolve(true);
-      })
-      .catch(error => console.error('openDatabase error', error));
+    }).then(db => {
+      database = db;
+      populateDatabase();
+      resolve(true);
+    }).catch(error => console.error('openDatabase error', error));
   });
 };
 

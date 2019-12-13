@@ -8,6 +8,8 @@ import TimerIndicator from '../components/TimerIndicator';
 
 import QuizContext from '../QuizContext';
 
+import ErrorHandler from '../ErrorHandler';
+
 const QuizScreen = ({ componentId, quizId }) => {
   useEffect(() => {
     fetchQuizDetails();
@@ -29,7 +31,10 @@ const QuizScreen = ({ componentId, quizId }) => {
         setTask(QuizContext.getTask(taskIndex));
         setIsFetching(false);
       })
-      .catch(reason => console.log(reason));
+      .catch(error => {
+        console.error(error);
+        ErrorHandler.showError(error);
+      });
   };
 
   const createItem = answer => {
