@@ -61,17 +61,17 @@ const HomeScreen = ({ componentId }) => {
       .then(response => response.json())
       .then(data => {
         insertQuizzesIntoDatabase(data)
-          .then(() => setFlatListDataFromDatabase())
-          .catch(() => setFlatListDataFromDatabase());
+          .then(() => setDataFromDatabase())
+          .catch(() => setDataFromDatabase());
       })
       .catch(error => {
         console.log('fetchQuizzes: ', error);
         ErrorHandler.showError(error)
-        setFlatListDataFromDatabase();
+        setDataFromDatabase();
       });
   };
 
-  const setFlatListDataFromDatabase = () => {
+  const setDataFromDatabase = () => {
     loadQuizzesFromDatabase().then(quizzes => {
       setQuizzesData(quizzes)
       setIsRefreshing(false)

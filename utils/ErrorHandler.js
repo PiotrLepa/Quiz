@@ -1,5 +1,4 @@
 import Snackbar from 'react-native-snackbar';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 class ErrorHandler {
 

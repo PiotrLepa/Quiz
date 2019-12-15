@@ -81,6 +81,9 @@ export const insertQuizzesIntoDatabase = quizzes => {
 
 export const openDatabase = () => {
   console.log('openDatabase called');
+  if (database) {
+    return;
+  }
   return new Promise((resolve, reject) => {
     SQLite.openDatabase({
       name: QUIZZES_DATABASE,
