@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import Snackbar from 'react-native-snackbar';
 import _ from 'lodash';
 import { navigateAndClearStack } from './NavigationUtils';
-import { MAIN_STACK_ID, HOME_SCREEN, RESULTS_SCREEN, BASE_URL } from '../Constants';
+import { MAIN_STACK_ID, HOME_SCREEN, RESULTS_SCREEN, BASE_URL } from '../utils/Constants';
 import AppButton from '../components/AppButton';
 
 import {
@@ -13,7 +13,7 @@ import {
   loadQuizzesFromDatabase,
 } from '../database/DatabaseUtils';
 
-import ErrorHandler from '../ErrorHandler';
+import ErrorHandler from '../utils/ErrorHandler';
 
 const Drawer = () => {
 

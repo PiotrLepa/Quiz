@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import QuizContext from '../QuizContext';
-import { HOME_SCREEN, RESULTS_SCREEN, BASE_URL } from '../Constants';
+import QuizContext from '../utils/QuizContext';
+import { HOME_SCREEN, RESULTS_SCREEN, BASE_URL } from '../utils/Constants';
 import { navigateAndClearStack } from '../navigation/NavigationUtils';
 import AppButton from '../components/AppButton';
 
-import ErrorHandler from '../ErrorHandler';
+import ErrorHandler from '../utils/ErrorHandler';
 
 const UserResultScreen = ({ componentId }) => {
   useEffect(() => {

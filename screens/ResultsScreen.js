@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, FlatList, RefreshControl } from 'react-native';
-import { BASE_URL } from '../Constants';
+import { BASE_URL } from '../utils/Constants';
 
-import ErrorHandler from '../ErrorHandler';
+import ErrorHandler from '../utils/ErrorHandler';
 
 const ResultsScreen = () => {
   useEffect(() => {

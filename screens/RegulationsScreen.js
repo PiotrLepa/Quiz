@@ -5,7 +5,7 @@ import {
   navigateAndClearStack,
   showDrawerMenuIcon,
 } from '../navigation/NavigationUtils';
-import {SHOW_REGULATIONS_SCREEN_STORAGE, HOME_SCREEN} from '../Constants';
+import {SHOW_REGULATIONS_SCREEN_STORAGE, HOME_SCREEN} from '../utils/Constants';
 import AppButton from '../components/AppButton';
 
 const RegulationsScreen = ({componentId}) => {

@@ -21,7 +21,7 @@ import {
   QUIZ_SCREEN,
   SHOW_REGULATIONS_SCREEN_STORAGE,
   BASE_URL,
-} from '../Constants';
+} from '../utils/Constants';
 import {
   openDatabase,
   closeDatabase,
@@ -29,7 +29,7 @@ import {
   loadQuizzesFromDatabase,
 } from '../database/DatabaseUtils';
 
-import ErrorHandler from '../ErrorHandler';
+import ErrorHandler from '../utils/ErrorHandler';
 
 const HomeScreen = ({ componentId }) => {
   const [quizzesData, setQuizzesData] = useState([]);

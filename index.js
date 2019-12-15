@@ -1,7 +1,7 @@
 import {Navigation} from 'react-native-navigation';
 
 import {setNavigationRoot} from './navigation/NavigationUtils';
-import {HOME_SCREEN, DRAWER, MAIN_STACK_ID} from './Constants';
+import {HOME_SCREEN, DRAWER, MAIN_STACK_ID} from './utils/Constants';
 
 Navigation.events().registerAppLaunchedListener(() => {
   Navigation.setDefaultOptions({

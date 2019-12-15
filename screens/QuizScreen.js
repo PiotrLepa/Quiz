@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, FlatList } from 'react-native';
 import { navigateAndClearStack } from '../navigation/NavigationUtils';
-import { HOME_SCREEN, USER_RESULT_SCREEN, BASE_URL } from '../Constants';
+import { HOME_SCREEN, USER_RESULT_SCREEN, BASE_URL } from '../utils/Constants';
 
 import AppButton from '../components/AppButton';
 import TimerIndicator from '../components/TimerIndicator';
 
-import QuizContext from '../QuizContext';
+import QuizContext from '../utils/QuizContext';
 
-import ErrorHandler from '../ErrorHandler';
+import ErrorHandler from '../utils/ErrorHandler';
 
 const QuizScreen = ({ componentId, quizId }) => {
   useEffect(() => {
