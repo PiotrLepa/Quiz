@@ -74,7 +74,7 @@ const QuizScreen = ({ componentId, quizId }) => {
         <View style={styles.container}>
           <TimerIndicator
             styles={{ flex: 1 }}
-            maxValue={5}
+            maxValue={task.duration}
             onTimeOver={() => handleUserAnswer(false)}
             shouldRefresh={refreshTimer}
             onRefreshed={() => setRefreshTimer(false)}

@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export default class QuizContext {
   static completedTasks = [];
 
@@ -37,7 +39,15 @@ export default class QuizContext {
 
   static setQuiz(quiz) {
     this.clear();
-    this.quiz = quiz;
+    this.quiz = this._shuffleTasksAndAnswers(quiz);
+  }
+
+  static _shuffleTasksAndAnswers(quiz) {
+    quiz.tasks = _.shuffle(quiz.tasks);
+    for (let i = 0; i < quiz.tasks.length; i++) {
+      quiz.tasks[i].answers = _.shuffle(quiz.tasks[i].answers);
+    }
+    return quiz;
   }
 
   static getTask(index) {

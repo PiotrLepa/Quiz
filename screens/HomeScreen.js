@@ -10,6 +10,7 @@ import {
 import AsyncStorage from '@react-native-community/async-storage';
 import SplashScreen from 'react-native-splash-screen';
 import { Navigation } from 'react-native-navigation';
+import _ from 'lodash';
 import {
   push,
   showDrawer,
@@ -73,7 +74,7 @@ const HomeScreen = ({ componentId }) => {
 
   const setDataFromDatabase = () => {
     loadQuizzesFromDatabase().then(quizzes => {
-      setQuizzesData(quizzes)
+      setQuizzesData(_.shuffle(quizzes))
       setIsRefreshing(false)
     });
   };
