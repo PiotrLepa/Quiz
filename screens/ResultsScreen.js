@@ -1,13 +1,21 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, Text, FlatList, RefreshControl} from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
 import {BASE_URL} from '../utils/Constants';
-import { NoConnectivityException } from '../utils/Exceptions';
+import {NoConnectivityException} from '../utils/Exceptions';
 import ErrorHandler from '../utils/ErrorHandler';
 
-const ResultsScreen = () => {
+const ResultsScreen = ({componentId}) => {
   useEffect(() => {
-    fetchResults();
-  }, []);
+    const unsubscribe = NetInfo.addEventListener(state => {
+      if (state.isConnected) {
+        fetchResults();
+      } else {
+        ErrorHandler.showError(new NoConnectivityException());
+      }
+    });
+    return unsubscribe;
+  }, [componentId]);
 
   const [resultsData, setResultsData] = useState();
 
@@ -22,10 +30,7 @@ const ResultsScreen = () => {
       })
       .catch(error => {
         console.log('fetchResults: ', error);
-        NetInfo.fetch().then(state => {
-          let err = state.isConnected ? error : new NoConnectivityException();
-          ErrorHandler.showError(err);
-        });
+        ErrorHandler.showError(error);
       });
   };
 

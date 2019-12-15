@@ -30,7 +30,7 @@ import {
   insertQuizzesIntoDatabase,
   loadQuizzesFromDatabase,
 } from '../database/DatabaseUtils';
-import { NoConnectivityException } from '../utils/Exceptions';
+import {NoConnectivityException} from '../utils/Exceptions';
 import ErrorHandler from '../utils/ErrorHandler';
 
 const HomeScreen = ({componentId}) => {
@@ -43,18 +43,31 @@ const HomeScreen = ({componentId}) => {
     Navigation.events().registerNavigationButtonPressedListener(
       ({componentId}) => showDrawer(componentId),
     );
+    let unsubscribe;
     shouldShowRegulationsScreen().then(shouldShow => {
       if (shouldShow) {
         hideDrawerMenuIcon(componentId);
         navigateAndClearStack(componentId, REGULATIONS_SCREEN);
       } else {
         openDatabase().then(() => {
-          fetchQuizzes();
+          unsubscribe = NetInfo.addEventListener(state => {
+            if (state.isConnected) {
+              fetchQuizzes();
+            } else {
+              setDataFromDatabase();
+              ErrorHandler.showError(new NoConnectivityException());
+            }
+          });
         });
       }
     });
 
-    return closeDatabase();
+    return () => {
+      closeDatabase();
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
   }, [componentId]);
 
   const fetchQuizzes = () => {
@@ -68,10 +81,7 @@ const HomeScreen = ({componentId}) => {
       })
       .catch(error => {
         console.log('fetchQuizzes: ', error);
-        NetInfo.fetch().then(state => {
-          let err = state.isConnected ? error : new NoConnectivityException();
-          ErrorHandler.showError(err);
-        });
+        ErrorHandler.showError(error);
         setDataFromDatabase();
       });
   };
