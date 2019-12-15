@@ -1,9 +1,15 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import Snackbar from 'react-native-snackbar';
 import _ from 'lodash';
-import { navigateAndClearStack } from './NavigationUtils';
-import { MAIN_STACK_ID, HOME_SCREEN, RESULTS_SCREEN, BASE_URL } from '../utils/Constants';
+import {navigateAndClearStack, push} from './NavigationUtils';
+import {
+  MAIN_STACK_ID,
+  HOME_SCREEN,
+  RESULTS_SCREEN,
+  QUIZ_SCREEN,
+  BASE_URL,
+} from '../utils/Constants';
 import AppButton from '../components/AppButton';
 
 import {
@@ -16,7 +22,6 @@ import {
 import ErrorHandler from '../utils/ErrorHandler';
 
 const Drawer = () => {
-
   const fetchQuizzes = () => {
     fetch(BASE_URL + 'tests')
       .then(response => response.json())
@@ -26,35 +31,40 @@ const Drawer = () => {
             .then(() => {
               closeDatabase();
               Snackbar.show({
-                title: "Quizzes fetched successfully",
+                title: 'Quizzes fetched successfully',
                 duration: Snackbar.LENGTH_LONG,
               });
+              navigateAndClearStack(MAIN_STACK_ID, HOME_SCREEN);
             })
             .catch(() => {
               closeDatabase();
-              ErrorHandler.showError(error)
+              ErrorHandler.showError(error);
             });
         });
       })
       .catch(error => {
         console.log('fetchQuizzes: ', error);
-        ErrorHandler.showError(error)
-        setDataFromDatabase();
+        ErrorHandler.showError(error);
       });
   };
 
   const drawQuiz = () => {
-    openDatabase().then(() => {
-      loadQuizzesFromDatabase()
-        .then(quizzess => {
-          closeDatabase();
-          const quiz = _.shuffle(quizzess)[0];
-          push(MAIN_STACK_ID, QUIZ_SCREEN, { quizId: quiz.id })
-        });
-    })
+    openDatabase()
+      .then(() => {
+        loadQuizzesFromDatabase()
+          .then(quizzes => {
+            closeDatabase();
+            const quiz = _.shuffle(quizzes)[0];
+            push(MAIN_STACK_ID, QUIZ_SCREEN, {quizId: quiz.id});
+          })
+          .catch(error => {
+            closeDatabase();
+            ErrorHandler.showError(error);
+          });
+      })
       .catch(() => {
         closeDatabase();
-        ErrorHandler.showError(error)
+        ErrorHandler.showError(error);
       });
   };
 
@@ -84,7 +94,7 @@ const Drawer = () => {
       </View>
     </>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

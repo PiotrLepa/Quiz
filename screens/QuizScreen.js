@@ -66,9 +66,7 @@ const QuizScreen = ({ componentId, quizId }) => {
 
   if (isFetching) {
     return (
-      <>
-        <Text>Fetching</Text>
-      </>
+      <View />
     );
   } else {
     return (
@@ -76,7 +74,7 @@ const QuizScreen = ({ componentId, quizId }) => {
         <View style={styles.container}>
           <TimerIndicator
             styles={{ flex: 1 }}
-            maxValue={task.duration}
+            maxValue={5}
             onTimeOver={() => handleUserAnswer(false)}
             shouldRefresh={refreshTimer}
             onRefreshed={() => setRefreshTimer(false)}

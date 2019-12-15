@@ -37,6 +37,7 @@ const TimerIndicator = ({maxValue, onTimeOver, shouldRefresh, onRefreshed}) => {
       } else {
         decrementTimer();
         if (timer === 0) {
+          setTimer(maxValue);
           onTimeOver();
         }
       }
