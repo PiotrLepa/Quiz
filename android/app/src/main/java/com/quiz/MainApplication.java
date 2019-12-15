@@ -20,8 +20,8 @@ import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 
 import org.pgsqlite.SQLitePluginPackage;
-
 import com.azendoo.reactnativesnackbar.SnackbarPackage;
+import com.reactnativecommunity.netinfo.NetInfoPackage;
 
 public class MainApplication extends NavigationApplication {
 
@@ -49,7 +49,8 @@ public class MainApplication extends NavigationApplication {
                 new AsyncStoragePackage(),
                 new SplashScreenReactPackage(),
                 new SQLitePluginPackage(),
-                new SnackbarPackage()
+                new SnackbarPackage(),
+                new NetInfoPackage()
         );
     }
 

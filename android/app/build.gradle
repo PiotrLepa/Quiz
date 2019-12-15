@@ -189,6 +189,7 @@ dependencies {
     implementation project(':react-native-navigation')
     implementation project(':react-native-sqlite-storage')
     implementation project(':react-native-snackbar')
+    implementation project(':react-native-community-netinfo')
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";

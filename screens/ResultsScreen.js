@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, FlatList, RefreshControl } from 'react-native';
-import { BASE_URL } from '../utils/Constants';
-
+import React, {useState, useEffect} from 'react';
+import {StyleSheet, View, Text, FlatList, RefreshControl} from 'react-native';
+import {BASE_URL} from '../utils/Constants';
+import { NoConnectivityException } from '../utils/Exceptions';
 import ErrorHandler from '../utils/ErrorHandler';
 
 const ResultsScreen = () => {
@@ -21,8 +21,11 @@ const ResultsScreen = () => {
         setResultsData(data.reverse());
       })
       .catch(error => {
-        console.log("fetchResults: ", error);
-        ErrorHandler.showError(error);
+        console.log('fetchResults: ', error);
+        NetInfo.fetch().then(state => {
+          let err = state.isConnected ? error : new NoConnectivityException();
+          ErrorHandler.showError(err);
+        });
       });
   };
 
@@ -45,7 +48,7 @@ const ResultsScreen = () => {
       <View style={styles.container}>
         <FlatList
           data={resultsData}
-          renderItem={({ item }) => createItem(item)}
+          renderItem={({item}) => createItem(item)}
           keyExtractor={(item, index) => index.toString()}
           refreshControl={
             <RefreshControl

@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import React, {useEffect} from 'react';
+import {StyleSheet, View, Text} from 'react-native';
 import QuizContext from '../utils/QuizContext';
-import { HOME_SCREEN, RESULTS_SCREEN, BASE_URL } from '../utils/Constants';
-import { navigateAndClearStack } from '../navigation/NavigationUtils';
+import {HOME_SCREEN, RESULTS_SCREEN, BASE_URL} from '../utils/Constants';
+import {navigateAndClearStack} from '../navigation/NavigationUtils';
 import AppButton from '../components/AppButton';
-
+import { NoConnectivityException } from '../utils/Exceptions';
 import ErrorHandler from '../utils/ErrorHandler';
 
-const UserResultScreen = ({ componentId }) => {
+const UserResultScreen = ({componentId}) => {
   useEffect(() => {
     saveUserResult();
   }, [0]);
@@ -19,18 +19,21 @@ const UserResultScreen = ({ componentId }) => {
       method: 'POST',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         nick: 'Piotrek',
         score: result.score,
         total: result.maxPoints,
         type: QuizContext.getQuizType(),
-        date: new Date().toLocaleDateString()
+        date: new Date().toLocaleDateString(),
       }),
     }).catch(error => {
       console.log('saveUserResult: ', error);
-      ErrorHandler.showError(error);
+      NetInfo.fetch().then(state => {
+        let err = state.isConnected ? error : new NoConnectivityException();
+        ErrorHandler.showError(err);
+      });
     });
   };
 
