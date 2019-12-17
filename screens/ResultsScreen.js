@@ -1,28 +1,37 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, Text, FlatList, RefreshControl} from 'react-native';
-import QuizContext from '../QuizContext';
-import {BASE_URL} from '../Constants';
+import NetInfo from '@react-native-community/netinfo';
+import {BASE_URL} from '../utils/Constants';
+import {NoConnectivityException} from '../utils/Exceptions';
+import ErrorHandler from '../utils/ErrorHandler';
 
-const ResultsScreen = () => {
-
+const ResultsScreen = ({componentId}) => {
   useEffect(() => {
-    fetchResults()
-  },[0]);
+    const unsubscribe = NetInfo.addEventListener(state => {
+      if (state.isConnected) {
+        fetchResults();
+      } else {
+        ErrorHandler.showError(new NoConnectivityException());
+      }
+    });
+    return unsubscribe;
+  }, [componentId]);
 
   const [resultsData, setResultsData] = useState();
 
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const refreshResults = () => {
-    setIsRefreshing(true);
-    setTimeout(() => setIsRefreshing(false), 1500);
-  };
-
   const fetchResults = () => {
     fetch(BASE_URL + 'results')
       .then(response => response.json())
-      .then(data => setResultsData(data.reverse()))
-      .catch(reason => console.log(reason));
+      .then(data => {
+        setIsRefreshing(false);
+        setResultsData(data.reverse());
+      })
+      .catch(error => {
+        console.log('fetchResults: ', error);
+        ErrorHandler.showError(error);
+      });
   };
 
   const createItem = item => {
@@ -48,7 +57,7 @@ const ResultsScreen = () => {
           keyExtractor={(item, index) => index.toString()}
           refreshControl={
             <RefreshControl
-              onRefresh={refreshResults}
+              onRefresh={fetchResults}
               refreshing={isRefreshing}
               tintColor="dodgerblue"
               colors={['dodgerblue']}
@@ -58,7 +67,7 @@ const ResultsScreen = () => {
       </View>
     </>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

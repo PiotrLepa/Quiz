@@ -1,16 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, FlatList } from 'react-native';
-import { navigateAndClearStack } from '../navigation/NavigationUtils';
-import { HOME_SCREEN, USER_RESULT_SCREEN, BASE_URL } from '../Constants';
-
+import React, {useState, useEffect} from 'react';
+import {StyleSheet, View, Text, TouchableOpacity, FlatList} from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
+import {navigateAndClearStack} from '../navigation/NavigationUtils';
+import {HOME_SCREEN, USER_RESULT_SCREEN, BASE_URL} from '../utils/Constants';
 import AppButton from '../components/AppButton';
 import TimerIndicator from '../components/TimerIndicator';
+import QuizContext from '../utils/QuizContext';
+import {NoConnectivityException} from '../utils/Exceptions';
+import ErrorHandler from '../utils/ErrorHandler';
 
-import QuizContext from '../QuizContext';
-
-const QuizScreen = ({ componentId, quizId }) => {
+const QuizScreen = ({componentId, quizId}) => {
   useEffect(() => {
-    fetchQuizDetails();
+    const unsubscribe = NetInfo.addEventListener(state => {
+      if (state.isConnected) {
+        fetchQuizDetails();
+      } else {
+        ErrorHandler.showError(new NoConnectivityException());
+      }
+    });
+    return unsubscribe;
   }, [0]);
 
   const [taskIndex, setTaskIndex] = useState(0);
@@ -29,7 +37,10 @@ const QuizScreen = ({ componentId, quizId }) => {
         setTask(QuizContext.getTask(taskIndex));
         setIsFetching(false);
       })
-      .catch(reason => console.log(reason));
+      .catch(error => {
+        console.log('fetchQuizDetails: ', error);
+        ErrorHandler.showError(error);
+      });
   };
 
   const createItem = answer => {
@@ -57,30 +68,28 @@ const QuizScreen = ({ componentId, quizId }) => {
     const nextIndex = taskIndex + 1;
     setTask(QuizContext.getTask(nextIndex));
     setTaskIndex(nextIndex);
-  }
+  };
 
   if (isFetching) {
-    return (
-      <>
-        <Text>Fetching</Text>
-      </>
-    );
+    return <View />;
   } else {
     return (
       <>
         <View style={styles.container}>
           <TimerIndicator
-            styles={{ flex: 1 }}
+            styles={{flex: 1}}
             maxValue={task.duration}
             onTimeOver={() => handleUserAnswer(false)}
             shouldRefresh={refreshTimer}
             onRefreshed={() => setRefreshTimer(false)}
           />
-          <Text style={styles.questionText}>{taskIndex + 1}. {task.question}</Text>
+          <Text style={styles.questionText}>
+            {taskIndex + 1}. {task.question}
+          </Text>
           <FlatList
             style={styles.answerList}
             data={task.answers}
-            renderItem={({ item }) => createItem(item)}
+            renderItem={({item}) => createItem(item)}
             keyExtractor={(item, index) => index.toString()}
           />
           <AppButton

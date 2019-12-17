@@ -8,7 +8,7 @@ import {
   REGULATIONS_SCREEN,
   USER_RESULT_SCREEN,
   DRAWER,
-} from '../Constants';
+} from '../utils/Constants';
 
 import HomeScreen from '../screens/HomeScreen';
 import QuizScreen from '../screens/QuizScreen';
