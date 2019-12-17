@@ -8,8 +8,10 @@ import {
   RefreshControl,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import NetInfo from '@react-native-community/netinfo';
 import SplashScreen from 'react-native-splash-screen';
 import {Navigation} from 'react-native-navigation';
+import _ from 'lodash';
 import {
   push,
   showDrawer,
@@ -21,37 +23,74 @@ import {
   QUIZ_SCREEN,
   SHOW_REGULATIONS_SCREEN_STORAGE,
   BASE_URL,
-} from '../Constants';
+} from '../utils/Constants';
+import {
+  openDatabase,
+  closeDatabase,
+  insertQuizzesIntoDatabase,
+  loadQuizzesFromDatabase,
+} from '../database/DatabaseUtils';
+import {NoConnectivityException} from '../utils/Exceptions';
+import ErrorHandler from '../utils/ErrorHandler';
 
 const HomeScreen = ({componentId}) => {
-  const [quizzesData, setQuizzesData] = useState();
+  const [quizzesData, setQuizzesData] = useState([]);
 
-  const [isRefreshing, setIsRefreshing] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
-    fetchQuizzes();
     SplashScreen.hide();
     Navigation.events().registerNavigationButtonPressedListener(
       ({componentId}) => showDrawer(componentId),
     );
+    let unsubscribe;
     shouldShowRegulationsScreen().then(shouldShow => {
       if (shouldShow) {
         hideDrawerMenuIcon(componentId);
         navigateAndClearStack(componentId, REGULATIONS_SCREEN);
+      } else {
+        openDatabase().then(() => {
+          unsubscribe = NetInfo.addEventListener(state => {
+            if (state.isConnected) {
+              fetchQuizzes();
+            } else {
+              setDataFromDatabase();
+              ErrorHandler.showError(new NoConnectivityException());
+            }
+          });
+        });
       }
     });
-  }, [0]);
+
+    return () => {
+      closeDatabase();
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, [componentId]);
 
   const fetchQuizzes = () => {
+    setIsRefreshing(true);
     fetch(BASE_URL + 'tests')
       .then(response => response.json())
-      .then(data => setQuizzesData(data))
-      .catch(reason => console.log(reason));
+      .then(data => {
+        insertQuizzesIntoDatabase(data)
+          .then(() => setDataFromDatabase())
+          .catch(() => setDataFromDatabase());
+      })
+      .catch(error => {
+        console.log('fetchQuizzes: ', error);
+        ErrorHandler.showError(error);
+        setDataFromDatabase();
+      });
   };
 
-  const refreshQuizzes = () => {
-    setIsRefreshing(true);
-    setTimeout(() => setIsRefreshing(false), 1500);
+  const setDataFromDatabase = () => {
+    loadQuizzesFromDatabase().then(quizzes => {
+      setQuizzesData(_.shuffle(quizzes));
+      setIsRefreshing(false);
+    });
   };
 
   const createItem = (
@@ -95,7 +134,7 @@ const HomeScreen = ({componentId}) => {
           keyExtractor={item => item.id}
           refreshControl={
             <RefreshControl
-              onRefresh={refreshQuizzes}
+              onRefresh={fetchQuizzes}
               refreshing={isRefreshing}
               tintColor="dodgerblue"
               colors={['dodgerblue']}
